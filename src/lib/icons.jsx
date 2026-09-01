@@ -1,0 +1,23 @@
+// Icon aliases in one place, so swapping the icon set touches one file.
+export {
+  ShoppingBasket as Basket,
+  Grid2x2,
+  Volleyball,
+  BookOpen,
+  Settings,
+  Plus,
+  Minus,
+  Camera,
+  Link as LinkIcon,
+  FileText,
+  ArrowLeft,
+  Trash2,
+  Share2,
+  Copy,
+  Pencil,
+  Check,
+  ChevronUp,
+  ChevronDown,
+  Search,
+  ExternalLink,
+} from 'lucide-react';

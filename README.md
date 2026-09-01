@@ -100,33 +100,39 @@ single JSON backup (pattern files included) and imports it on a new phone.
 
 ## Running it
 
-It's a static site — any web server works:
+Built with **React**, **[shadcn/ui](https://ui.shadcn.com)** components,
+**Tailwind CSS 4**, and **Vite**:
 
 ```sh
-python3 -m http.server 8000
-# then open http://localhost:8000
+npm install
+npm run dev      # local development
+npm run build    # production build in dist/
 ```
 
-To put it on your phone, host the repo with GitHub Pages (Settings → Pages →
-deploy from branch), open the URL in your phone browser, and *Add to Home
-Screen*. Camera scanning requires HTTPS, which GitHub Pages provides.
+Pushing to the deploy branch publishes automatically to GitHub Pages via
+`.github/workflows/deploy-pages.yml`. Open the Pages URL on your phone and
+*Add to Home Screen* — camera scanning requires HTTPS, which Pages provides.
 
 ## Structure
 
 ```
-index.html            app shell, views, dialogs
-css/styles.css        themes (CSS custom properties) + layout
-js/app.js             navigation, theming, settings, backup
-js/db.js              IndexedDB + localStorage helpers
-js/projects.js        projects, counters, sharing
-js/charts.js          mosaic chart editor/reader, photo import
-js/yarn.js            stash, barcode lookup chain
-js/scanner.js         camera scanning (BarcodeDetector / ZXing)
-js/patterns.js        pattern library (web / upload / photo)
-js/ravelry.js         Ravelry API client + share text
-sw.js                 offline cache
-manifest.webmanifest  PWA install metadata
+index.html                    entry document
+src/main.jsx                  React bootstrap
+src/App.jsx                   navigation shell, tab bar, theming
+src/app.css                   shadcn theme tokens — five cozy palettes
+src/components/ui/            shadcn/ui components (button, card, dialog,
+                              input, label, select, textarea, checkbox,
+                              radio-group, progress, badge)
+src/features/                 app views: projects, counters, chart reader,
+                              yarn stash + scanner, patterns, settings
+src/lib/db.js                 IndexedDB + localStorage helpers
+src/lib/lookup.js             barcode lookup chain
+src/lib/ravelry.js            Ravelry API client + share text
+src/lib/announce.js           screen-reader live region
+public/manifest.webmanifest   PWA install metadata (SW via vite-plugin-pwa)
 ```
 
-No build step, no framework, no dependencies beyond an optional CDN-loaded
-barcode fallback.
+The shadcn components live in `src/components/ui/` in the usual copy-in
+style, themed through the standard shadcn CSS variables (`--background`,
+`--primary`, `--ring`, …) so every component follows all five themes
+automatically.
