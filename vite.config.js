@@ -18,7 +18,7 @@ export default defineConfig({
       includeAssets: ['icons/icon.svg', 'icons/icon-192.png'],
       manifest: false, // we ship our own public/manifest.webmanifest
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest,woff2}'],
         navigateFallback: '/jubilant-octo-barnacle/index.html',
       },
     }),

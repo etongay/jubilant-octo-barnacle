@@ -84,18 +84,28 @@ requires OAuth with a server-held secret, which a serverless, on-device app
 deliberately avoids — your credentials stay yours.)
 
 ### 🎨 Cozy by design, accessible by default
+- **Typography**: headings are set in [Fraunces](https://fonts.google.com/specimen/Fraunces)
+  with its `SOFT` axis at 100 — rounded, friendly terminals — while body
+  copy and controls use [Nunito Sans](https://fonts.google.com/specimen/Nunito+Sans),
+  a humanist sans with a tall x-height and open apertures that stays
+  comfortable over long stretches of pattern notes. The serif/sans pairing
+  is what carries the heading hierarchy, so headings stay distinct without
+  relying on size alone. Both are self-hosted (latin + latin-ext variable
+  subsets, ~90 KB for a typical device) and precached, so the app keeps its
+  voice offline.
 - Six themes — **Hearth** (warm cream), **Meadow**, **Lavender**,
   **Orchid** (blush and plum), **Night** (dark), and **High contrast** —
   plus three text sizes. The default follows your system's light/dark
   preference.
 - **Platform-adaptive design**: on iPhone the app wears an iOS 26
   liquid-glass skin (translucent blurred surfaces, floating capsule tab
-  bar, bottom-sheet dialogs, system font, large-title header); on Android
-  it follows Material 3 (tonal elevated surfaces, full-pill buttons,
-  navigation-bar active indicator, Roboto, 28dp dialogs). Detection is
-  automatic, and **More → App style** can pin any skin — including the
-  cozy classic serif look. All five color themes flow through every skin,
-  and High contrast disables translucency so contrast stays guaranteed.
+  bar, bottom-sheet dialogs, large-title header); on Android it follows
+  Material 3 (tonal elevated surfaces, full-pill buttons, navigation-bar
+  active indicator, 28dp dialogs). The skins change shape and surface, not
+  type — the Fraunces/Nunito Sans voice stays constant so the app reads as
+  itself on every device. Detection is automatic, and **More → App style**
+  can pin any skin. All six colour themes flow through every skin, and
+  High contrast disables translucency so contrast stays guaranteed.
 - WCAG 2.2 AA throughout: all text meets contrast minimums in every theme,
   every control is keyboard-operable with visible focus, touch targets are
   ≥44 px, counters and actions announce through a live region, dialogs are
@@ -128,7 +138,8 @@ Pushing to the deploy branch publishes automatically to GitHub Pages via
 index.html                    entry document
 src/main.jsx                  React bootstrap
 src/App.jsx                   navigation shell, tab bar, theming
-src/app.css                   shadcn theme tokens — five cozy palettes
+src/app.css                   type system, theme tokens (six palettes),
+                              platform skins
 src/components/ui/            shadcn/ui components (button, card, dialog,
                               input, label, select, textarea, checkbox,
                               radio-group, progress, badge)
@@ -138,6 +149,8 @@ src/lib/db.js                 IndexedDB + localStorage helpers
 src/lib/lookup.js             barcode lookup chain
 src/lib/ravelry.js            Ravelry API client + share text
 src/lib/announce.js           screen-reader live region
+src/lib/platform.js           iOS / Material / cozy skin detection
+src/assets/fonts/             self-hosted variable font subsets
 public/manifest.webmanifest   PWA install metadata (SW via vite-plugin-pwa)
 ```
 
