@@ -4,7 +4,7 @@ import { announce } from '@/lib/announce.js';
 import { buildShareText } from '@/lib/ravelry.js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { StatusBadge, TagList } from '@/components/badges.jsx';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -106,13 +106,9 @@ export default function ProjectDetail({ id, navigate }) {
       </Button>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h2 id="project-heading">{project.name}</h2>
-        <Badge>{STATUS_LABELS[project.status]}</Badge>
+        <StatusBadge>{STATUS_LABELS[project.status]}</StatusBadge>
       </div>
-      {project.tags.length > 0 && (
-        <ul aria-label="Tags" className="mb-3 flex list-none flex-wrap gap-1 p-0">
-          {project.tags.map(t => <li key={t}><Badge>{t}</Badge></li>)}
-        </ul>
-      )}
+      <TagList tags={project.tags} className="mb-3" />
 
       <div className="grid gap-3">
         <Card>

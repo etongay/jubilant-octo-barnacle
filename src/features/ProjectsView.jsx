@@ -12,7 +12,7 @@ import { allTags, addCustomTag } from '@/lib/tags.js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
+import { StatusBadge, TagList } from '@/components/badges.jsx';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -74,7 +74,7 @@ function HeroCounter({ project, onChange, onSwitch, onOpen }) {
               <p className="mt-0.5 text-sm text-muted-foreground">{project.hook}</p>
             )}
           </div>
-          <Badge>{STATUS_LABELS[project.status]}</Badge>
+          <StatusBadge>{STATUS_LABELS[project.status]}</StatusBadge>
         </div>
 
         {counter ? (
@@ -254,7 +254,9 @@ export default function ProjectsView({ navigate }) {
             >
               <Filter aria-hidden="true" /> Filter
               {filterCount > 0 && (
-                <Badge variant="default" className="ml-1 tabular-nums">{filterCount}</Badge>
+                <span className="ml-1 inline-grid min-w-5 place-items-center rounded-full bg-primary px-1.5 text-xs text-primary-foreground tabular-nums">
+                  {filterCount}
+                </span>
               )}
             </Button>
           </div>
@@ -277,30 +279,26 @@ export default function ProjectsView({ navigate }) {
                 return (
                   <li key={p.id}>
                     <Card className="py-0">
-                      <button
-                        type="button"
-                        onClick={() => navigate('project-detail', p.id)}
-                        className="w-full rounded-xl text-left"
-                      >
-                        <CardContent className="px-4 py-3.5">
-                          <div className="flex items-center justify-between gap-2">
+                      <CardContent className="px-4 py-3.5">
+                        <button
+                          type="button"
+                          onClick={() => navigate('project-detail', p.id)}
+                          className="w-full rounded-lg text-left"
+                        >
+                          <span className="flex items-center justify-between gap-2">
                             <span className="font-bold">{p.name}</span>
-                            <Badge>{STATUS_LABELS[p.status]}</Badge>
-                          </div>
+                            <StatusBadge>{STATUS_LABELS[p.status]}</StatusBadge>
+                          </span>
                           {counter && (
-                            <p className="mt-0.5 text-sm text-muted-foreground">
+                            <span className="mt-0.5 block text-sm text-muted-foreground">
                               {counter.value}{counter.target ? ` of ${counter.target}` : ''}{' '}
                               {counter.name.toLowerCase()}
-                            </p>
-                          )}
-                          {pct !== null && <Progress value={pct} aria-label="Progress" className="mt-2" />}
-                          {(p.tags || []).length > 0 && (
-                            <span className="mt-2 flex flex-wrap gap-1">
-                              {p.tags.map(t => <Badge key={t}>{t}</Badge>)}
                             </span>
                           )}
-                        </CardContent>
-                      </button>
+                        </button>
+                        {pct !== null && <Progress value={pct} aria-label="Progress" className="mt-2" />}
+                        <TagList tags={p.tags} className="mt-2" label={`Tags on ${p.name}`} />
+                      </CardContent>
                     </Card>
                   </li>
                 );

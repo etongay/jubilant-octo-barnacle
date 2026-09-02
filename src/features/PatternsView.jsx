@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
+import { TagList } from '@/components/badges.jsx';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
@@ -266,25 +266,25 @@ export default function PatternsView() {
             return (
               <li key={p.id}>
                 <Card className="py-0">
-                  <CardContent className="flex items-center gap-2 px-3 py-3">
-                    <button
-                      type="button"
-                      onClick={() => openPattern(p)}
-                      className="min-w-0 flex-1 rounded-lg text-left"
-                      aria-label={`Open ${p.title}, ${SOURCE_LABEL[p.source]}`}
-                    >
-                      <span className="flex items-start gap-2 font-semibold">
-                        <span className="mt-0.5 shrink-0">{SOURCE_ICON[p.source]}</span>
-                        <span className="min-w-0">{p.title}</span>
-                      </span>
-                      <span className="mt-1 flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
-                        <span className="inline-flex items-center gap-1">
+                  <CardContent className="flex items-start gap-2 px-3 py-3">
+                    <div className="min-w-0 flex-1">
+                      <button
+                        type="button"
+                        onClick={() => openPattern(p)}
+                        className="w-full rounded-lg text-left"
+                        aria-label={`Open ${p.title}, ${SOURCE_LABEL[p.source]}`}
+                      >
+                        <span className="flex items-start gap-2 font-semibold">
+                          <span className="mt-0.5 shrink-0">{SOURCE_ICON[p.source]}</span>
+                          <span className="min-w-0">{p.title}</span>
+                        </span>
+                        <span className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
                           <Folder className="size-3.5 shrink-0" aria-hidden="true" />
                           {folder ? folder.name : 'Unfiled'}
                         </span>
-                        {(p.tags || []).map(t => <Badge key={t}>{t}</Badge>)}
-                      </span>
-                    </button>
+                      </button>
+                      <TagList tags={p.tags} className="mt-1.5" label={`Tags on ${p.title}`} />
+                    </div>
                     <Button variant="ghost" size="icon" aria-label={`Move ${p.title} to a folder`} onClick={() => setMovePattern(p)}>
                       <FolderInput aria-hidden="true" />
                     </Button>
