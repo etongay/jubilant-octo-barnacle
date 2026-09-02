@@ -15,6 +15,7 @@ const THEMES = [
   { id: 'hearth', label: 'Hearth', dot: '#f6efe6' },
   { id: 'meadow', label: 'Meadow', dot: '#edf1e4' },
   { id: 'lavender', label: 'Lavender', dot: '#efecf5' },
+  { id: 'terracotta', label: 'Terracotta', dot: '#E07A5F' },
   { id: 'night', label: 'Night', dot: '#211e1a' },
   { id: 'contrast', label: 'High contrast', dot: '#ffffff' },
 ];

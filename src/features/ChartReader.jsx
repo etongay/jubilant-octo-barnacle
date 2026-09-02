@@ -127,7 +127,9 @@ export default function ChartReader({ id, navigate }) {
               const isCurrent = r === chart.currentRow && !editMode;
               const isDone = chart.doneRows[r - 1];
               return (
-                <tr key={r} className={cn(!isCurrent && isDone && 'opacity-45')}>
+                <tr key={r}>
+                  {/* Row numbers stay at full strength — only the stitches
+                      dim, so completed rows remain readable. */}
                   <th scope="row" className={cn('px-1.5 text-right text-xs font-normal text-muted-foreground',
                     isCurrent && 'bg-highlight font-bold text-foreground')}>
                     {r}{isDone ? ' ✓' : ''}
@@ -137,6 +139,7 @@ export default function ChartReader({ id, navigate }) {
                     const done = chart.doneCells[idx] && !editMode;
                     return (
                       <td key={c} className={cn('border p-0',
+                        !isCurrent && isDone && 'opacity-45',
                         isCurrent && 'border-t-3 border-b-3 border-t-ring border-b-ring')}
                         style={{ background: chart.palette[chart.cells[idx]] || chart.palette[0] }}>
                         <button
