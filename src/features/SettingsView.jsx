@@ -15,7 +15,7 @@ const THEMES = [
   { id: 'hearth', label: 'Hearth', dot: '#f6efe6' },
   { id: 'meadow', label: 'Meadow', dot: '#edf1e4' },
   { id: 'lavender', label: 'Lavender', dot: '#efecf5' },
-  { id: 'terracotta', label: 'Terracotta', dot: '#E07A5F' },
+  { id: 'orchid', label: 'Orchid', dot: '#8F3985' },
   { id: 'night', label: 'Night', dot: '#211e1a' },
   { id: 'contrast', label: 'High contrast', dot: '#ffffff' },
 ];
@@ -104,7 +104,7 @@ export default function SettingsView({ navigate }) {
           <CardTitle>Ravelry connection</CardTitle>
           <CardDescription>
             Create free API keys at{' '}
-            <a className="text-primary underline" href="https://www.ravelry.com/pro/developer" target="_blank" rel="noopener noreferrer">
+            <a className="text-link underline" href="https://www.ravelry.com/pro/developer" target="_blank" rel="noopener noreferrer">
               ravelry.com/pro/developer
             </a>{' '}
             (choose “Basic Auth: read only”). Keys are stored only on this device.
@@ -141,7 +141,7 @@ export default function SettingsView({ navigate }) {
           <CardDescription>
             Scanned barcodes are first checked against your own stash history, then a public UPC database.
             You can add a{' '}
-            <a className="text-primary underline" href="https://go-upc.com/plans/api" target="_blank" rel="noopener noreferrer">Go-UPC</a>{' '}
+            <a className="text-link underline" href="https://go-upc.com/plans/api" target="_blank" rel="noopener noreferrer">Go-UPC</a>{' '}
             API key for better coverage.
           </CardDescription>
         </CardHeader>

@@ -133,7 +133,7 @@ export default function ProjectDetail({ id, navigate }) {
             {project.hook && <p>Hook: {project.hook}</p>}
             {pattern ? (
               pattern.url ? (
-                <a className="inline-flex items-center gap-1 text-primary underline" href={pattern.url} target="_blank" rel="noopener noreferrer">
+                <a className="inline-flex items-center gap-1 text-link underline" href={pattern.url} target="_blank" rel="noopener noreferrer">
                   {pattern.title} <ExternalLink className="size-4" aria-hidden="true" />
                 </a>
               ) : (

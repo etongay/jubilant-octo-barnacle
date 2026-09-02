@@ -85,8 +85,9 @@ deliberately avoids — your credentials stay yours.)
 
 ### 🎨 Cozy by design, accessible by default
 - Six themes — **Hearth** (warm cream), **Meadow**, **Lavender**,
-  **Terracotta**, **Night** (dark), and **High contrast** — plus three text
-  sizes. The default follows your system's light/dark preference.
+  **Orchid** (blush and plum), **Night** (dark), and **High contrast** —
+  plus three text sizes. The default follows your system's light/dark
+  preference.
 - **Platform-adaptive design**: on iPhone the app wears an iOS 26
   liquid-glass skin (translucent blurred surfaces, floating capsule tab
   bar, bottom-sheet dialogs, system font, large-title header); on Android

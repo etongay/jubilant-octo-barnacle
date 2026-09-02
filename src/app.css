@@ -29,6 +29,10 @@
   --ring: #8c5a2b;
   --highlight: #ffe9c4;
   --done-overlay: rgba(61, 47, 35, 0.55);
+  /* Primary as *text* on a page/card background. Identical to --primary
+     in every theme whose primary is dark enough to read; themes with a
+     light primary (Terracotta) override it with a deeper tone. */
+  --link: var(--primary);
   color-scheme: light;
 }
 
@@ -76,31 +80,33 @@
   --done-overlay: rgba(50, 43, 64, 0.55);
 }
 
-[data-theme="terracotta"] {
-  /* User palette: #F4F1DE cream · #E07A5F terracotta · #3D405B ink ·
-     #81B29A sage · #F2CC8F sunflower. Terracotta is deepened to #A84A30
-     wherever white text sits on it (the raw tone is only 2.95:1). */
-  --background: #F4F1DE;
-  --foreground: #3D405B;
-  --card: #FBF8EC;
-  --card-foreground: #3D405B;
-  --popover: #FBF8EC;
-  --popover-foreground: #3D405B;
-  --primary: #A84A30;
+[data-theme="orchid"] {
+  /* User palette: #EFD9CE blush · #CEA2AC dusty rose · #A675A1 orchid ·
+     #8F3985 plum · #25283D ink. Plum carries white text at 6.8:1 and
+     delineates itself at 5:1 on blush, so it works as the primary fill
+     with no adjustment. Orchid is reserved for tints and chart colours —
+     it is too light to carry white text (3.7:1) or to read as link text. */
+  --background: #EFD9CE;
+  --foreground: #25283D;
+  --card: #FAEDE7;
+  --card-foreground: #25283D;
+  --popover: #FAEDE7;
+  --popover-foreground: #25283D;
+  --primary: #8F3985;
   --primary-foreground: #FFFFFF;
-  --secondary: #D8E5DD;
-  --secondary-foreground: #3D405B;
-  --muted: #EDE7CE;
-  --muted-foreground: #5C5F7A;
-  --accent: #F6DCD3;
-  --accent-foreground: #3D405B;
+  --secondary: #E9D3D8;
+  --secondary-foreground: #25283D;
+  --muted: #E9D3D8;
+  --muted-foreground: #4C4F6B;
+  --accent: #EFDCE9;
+  --accent-foreground: #25283D;
   --destructive: #9C3535;
   --destructive-foreground: #FFFFFF;
-  --border: #C3B893;
-  --input: #C3B893;
-  --ring: #A84A30;
-  --highlight: #F2CC8F;
-  --done-overlay: rgba(61, 64, 91, 0.55);
+  --border: #946C7C;
+  --input: #946C7C;
+  --ring: #8F3985;
+  --highlight: #CEA2AC;
+  --done-overlay: rgba(37, 40, 61, 0.55);
 }
 
 [data-theme="night"] {
@@ -173,6 +179,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-highlight: var(--highlight);
+  --color-link: var(--link);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -321,7 +328,7 @@
   border-radius: 999px;
 }
 [data-platform="ios"] .tab-bar button[aria-current] {
-  color: var(--primary);
+  color: var(--link);
 }
 [data-platform="ios"] .app-shell {
   padding-bottom: 7.5rem;
