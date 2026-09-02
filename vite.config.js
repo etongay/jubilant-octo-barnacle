@@ -7,6 +7,9 @@ import path from 'path';
 // base must match the GitHub Pages project path.
 export default defineConfig({
   base: '/jubilant-octo-barnacle/',
+  // Keep modern CSS (color-mix, the translate property) instead of
+  // downgrading it — the platform skins depend on both.
+  build: { cssTarget: ['chrome111', 'safari16.4', 'firefox128'] },
   plugins: [
     react(),
     tailwindcss(),

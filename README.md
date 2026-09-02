@@ -87,6 +87,14 @@ deliberately avoids — your credentials stay yours.)
 - Five themes — **Hearth** (warm cream), **Meadow**, **Lavender**, **Night**
   (dark), and **High contrast** — plus three text sizes. The default follows
   your system's light/dark preference.
+- **Platform-adaptive design**: on iPhone the app wears an iOS 26
+  liquid-glass skin (translucent blurred surfaces, floating capsule tab
+  bar, bottom-sheet dialogs, system font, large-title header); on Android
+  it follows Material 3 (tonal elevated surfaces, full-pill buttons,
+  navigation-bar active indicator, Roboto, 28dp dialogs). Detection is
+  automatic, and **More → App style** can pin any skin — including the
+  cozy classic serif look. All five color themes flow through every skin,
+  and High contrast disables translucency so contrast stays guaranteed.
 - WCAG 2.2 AA throughout: all text meets contrast minimums in every theme,
   every control is keyboard-operable with visible focus, touch targets are
   ≥44 px, counters and actions announce through a live region, dialogs are

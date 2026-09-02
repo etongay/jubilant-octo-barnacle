@@ -177,3 +177,213 @@
     }
   }
 }
+
+/* ======================================================================
+   Platform-adaptive skins. shadcn components expose data-slot hooks, so
+   each skin restyles the same primitives without touching markup.
+   These rules are unlayered, so they win over Tailwind utilities.
+   ====================================================================== */
+
+/* ---------- iOS 26 · Liquid Glass ---------- */
+
+[data-platform="ios"] {
+  --radius: 1.15rem;
+}
+
+[data-platform="ios"] body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+}
+
+/* Large-title navigation header */
+[data-platform="ios"] header {
+  text-align: left;
+  padding-top: max(1rem, env(safe-area-inset-top, 0px));
+}
+[data-platform="ios"] header h1 {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+/* Translucent glass cards */
+[data-platform="ios"] [data-slot="card"] {
+  background: color-mix(in srgb, var(--card) 78%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  backdrop-filter: blur(16px) saturate(1.6);
+  border-color: color-mix(in srgb, var(--border) 45%, transparent);
+  border-radius: 1.4rem;
+  box-shadow: 0 4px 24px rgb(0 0 0 / 0.06);
+}
+
+/* Capsule buttons */
+[data-platform="ios"] [data-slot="button"] {
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* Grouped-inset form fields: filled, borderless */
+[data-platform="ios"] [data-slot="input"],
+[data-platform="ios"] [data-slot="textarea"],
+[data-platform="ios"] [data-slot="select-trigger"] {
+  background: color-mix(in srgb, var(--secondary) 85%, var(--card));
+  border-color: transparent;
+  border-radius: 0.85rem;
+}
+
+/* Dialogs become bottom sheets with a grabber */
+[data-platform="ios"] [data-slot="dialog-content"] {
+  top: auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  --dlg-translate: 0 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: 88dvh;
+  border-radius: 1.75rem 1.75rem 0 0;
+  border-bottom: 0;
+  background: color-mix(in srgb, var(--popover) 90%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+}
+[data-platform="ios"] [data-slot="dialog-content"]::before {
+  content: "";
+  position: absolute;
+  top: 0.45rem;
+  left: 50%;
+  translate: -50% 0;
+  width: 2.25rem;
+  height: 0.3rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--foreground) 25%, transparent);
+}
+@media (min-width: 640px) {
+  [data-platform="ios"] [data-slot="dialog-content"] {
+    --dlg-translate: -50% 0;
+    left: 50%;
+    right: auto;
+    max-width: 28rem;
+  }
+}
+
+[data-platform="ios"] [data-slot="select-content"] {
+  background: color-mix(in srgb, var(--popover) 85%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  border-radius: 1rem;
+}
+
+/* Floating glass capsule tab bar */
+[data-platform="ios"] .tab-bar {
+  left: 0.9rem;
+  right: 0.9rem;
+  bottom: calc(0.7rem + env(safe-area-inset-bottom, 0px));
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 72%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  box-shadow: 0 10px 32px rgb(0 0 0 / 0.14);
+  padding: 0.15rem 0.25rem;
+  max-width: 26rem;
+  margin: 0 auto;
+}
+[data-platform="ios"] .tab-bar button {
+  border-top: 0;
+  margin-top: 0;
+  border-radius: 999px;
+}
+[data-platform="ios"] .tab-bar button[aria-current] {
+  color: var(--primary);
+}
+[data-platform="ios"] .app-shell {
+  padding-bottom: 7.5rem;
+}
+
+/* ---------- Android · Material 3 ---------- */
+
+[data-platform="material"] {
+  --radius: 1rem;
+}
+
+[data-platform="material"] body {
+  font-family: Roboto, "Google Sans Text", system-ui, sans-serif;
+}
+
+[data-platform="material"] header h1 {
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* Tonal elevated cards — surface tint instead of borders */
+[data-platform="material"] [data-slot="card"] {
+  background: color-mix(in srgb, var(--primary) 6%, var(--card));
+  border-color: transparent;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 1px 3px 1px rgb(0 0 0 / 0.08);
+}
+[data-theme="contrast"][data-platform="material"] [data-slot="card"] {
+  border-color: var(--border);
+}
+
+/* Full-pill buttons, M3 label style */
+[data-platform="material"] [data-slot="button"] {
+  border-radius: 999px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Outlined text fields (4dp corners) */
+[data-platform="material"] [data-slot="input"],
+[data-platform="material"] [data-slot="textarea"],
+[data-platform="material"] [data-slot="select-trigger"] {
+  border-radius: 0.25rem;
+}
+
+/* M3 dialogs: 28dp corners, tonal surface */
+[data-platform="material"] [data-slot="dialog-content"] {
+  border-radius: 1.75rem;
+  border-color: transparent;
+  background: color-mix(in srgb, var(--primary) 8%, var(--popover));
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.22);
+}
+
+/* M3 navigation bar: tonal surface, active-indicator pill behind icon */
+[data-platform="material"] .tab-bar {
+  background: color-mix(in srgb, var(--primary) 8%, var(--card));
+  border-top: 0;
+  box-shadow: 0 -1px 3px rgb(0 0 0 / 0.1);
+}
+[data-platform="material"] .tab-bar button {
+  border-top: 0;
+  margin-top: 0;
+  font-weight: 500;
+}
+[data-platform="material"] .tab-bar .tab-icon {
+  padding: 0.2rem 1rem;
+  border-radius: 999px;
+  transition: background-color 0.15s ease;
+}
+[data-platform="material"] .tab-bar button[aria-current] .tab-icon {
+  background: color-mix(in srgb, var(--primary) 24%, var(--background));
+}
+[data-theme="contrast"][data-platform="material"] .tab-bar button[aria-current] .tab-icon {
+  background: var(--highlight);
+}
+
+/* Glass and tints can't guarantee contrast in forced high-contrast mode —
+   fall back to opaque surfaces there. */
+[data-theme="contrast"][data-platform="ios"] [data-slot="card"],
+[data-theme="contrast"][data-platform="ios"] [data-slot="dialog-content"],
+[data-theme="contrast"][data-platform="ios"] [data-slot="select-content"],
+[data-theme="contrast"][data-platform="ios"] .tab-bar {
+  background: var(--card);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: var(--border);
+}
+[data-theme="contrast"][data-platform="ios"] [data-slot="input"],
+[data-theme="contrast"][data-platform="ios"] [data-slot="textarea"],
+[data-theme="contrast"][data-platform="ios"] [data-slot="select-trigger"] {
+  border-color: var(--input);
+}

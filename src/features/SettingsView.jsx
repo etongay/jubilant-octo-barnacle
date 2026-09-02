@@ -3,6 +3,7 @@ import { db, settings } from '@/lib/db.js';
 import { announce } from '@/lib/announce.js';
 import { testRavelry } from '@/lib/ravelry.js';
 import { applyTheme } from '@/App.jsx';
+import { applyPlatform, detectPlatform } from '@/lib/platform.js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -25,6 +26,11 @@ export default function SettingsView({ navigate }) {
   const [ravPass, setRavPass] = useState(settings.get('ravPass', ''));
   const [goupcKey, setGoupcKey] = useState(settings.get('goupcKey', ''));
   const [ravStatus, setRavStatus] = useState('');
+  const [platform, setPlatform] = useState(settings.get('platform', 'auto') || 'auto');
+
+  const PLATFORM_LABELS = {
+    cozy: 'Cozy classic', ios: 'iOS glass', material: 'Material (Android)',
+  };
 
   return (
     <section aria-labelledby="settings-heading" className="grid gap-3">
@@ -55,6 +61,25 @@ export default function SettingsView({ navigate }) {
               </Label>
             ))}
           </RadioGroup>
+          <div className="grid gap-1.5">
+            <Label htmlFor="app-style">App style</Label>
+            <Select value={platform} onValueChange={(v) => {
+              setPlatform(v);
+              const resolved = applyPlatform(v);
+              announce(PLATFORM_LABELS[resolved] + ' style applied');
+            }}>
+              <SelectTrigger id="app-style" className="max-w-64"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="auto">Automatic ({PLATFORM_LABELS[detectPlatform()]})</SelectItem>
+                <SelectItem value="cozy">Cozy classic</SelectItem>
+                <SelectItem value="ios">iOS glass</SelectItem>
+                <SelectItem value="material">Material (Android)</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-sm text-muted-foreground">
+              Automatic matches your phone: liquid-glass on iPhone, Material on Android.
+            </p>
+          </div>
           <div className="grid gap-1.5">
             <Label htmlFor="font-scale">Text size</Label>
             <Select value={fontScale} onValueChange={(v) => {

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Basket, Grid2x2, Volleyball, BookOpen, Settings } from './lib/icons.jsx';
 import { settings } from './lib/db.js';
 import { registerAnnouncer } from './lib/announce.js';
+import { applyPlatform } from './lib/platform.js';
 import ProjectsView from './features/ProjectsView.jsx';
 import ProjectDetail from './features/ProjectDetail.jsx';
 import ChartsView from './features/ChartsView.jsx';
@@ -47,6 +48,7 @@ export default function App() {
     const saved = settings.get('theme');
     const preferDark = matchMedia('(prefers-color-scheme: dark)').matches;
     applyTheme(saved || (preferDark ? 'night' : 'hearth'));
+    applyPlatform(settings.get('platform', 'auto'));
     document.documentElement.style.setProperty('--font-scale', String(settings.get('fontScale', 1)));
   }, []);
 
@@ -60,7 +62,7 @@ export default function App() {
     route.view.startsWith('chart') ? 'charts' : route.view;
 
   return (
-    <div className="mx-auto max-w-2xl pb-24">
+    <div className="app-shell mx-auto max-w-2xl pb-24">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2.5 focus:text-primary-foreground"
@@ -85,7 +87,7 @@ export default function App() {
         {route.view === 'more' && <SettingsView navigate={navigate} />}
       </main>
 
-      <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-40 flex border-t bg-card pb-[env(safe-area-inset-bottom,0px)]">
+      <nav aria-label="Main" className="tab-bar fixed inset-x-0 bottom-0 z-40 flex border-t bg-card pb-[env(safe-area-inset-bottom,0px)]">
         {TABS.map(tab => {
           const Icon = tab.icon;
           const current = activeTab === tab.id;
@@ -100,7 +102,9 @@ export default function App() {
                 current ? '-mt-px border-primary font-bold text-foreground' : 'text-muted-foreground'
               )}
             >
-              <Icon className="size-6" aria-hidden="true" />
+              <span className="tab-icon inline-flex items-center justify-center">
+                <Icon className="size-6" aria-hidden="true" />
+              </span>
               {tab.label}
             </button>
           );
