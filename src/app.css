@@ -501,3 +501,33 @@
 [data-theme="contrast"][data-platform="ios"] [data-slot="select-trigger"] {
   border-color: var(--input);
 }
+
+/* ---------- Floating counter bar ---------- */
+/* Sits clear of the tab bar, whose height and inset differ per skin. */
+:root { --counter-bottom: calc(3.9rem + env(safe-area-inset-bottom, 0px)); }
+[data-platform="ios"] { --counter-bottom: calc(5.1rem + env(safe-area-inset-bottom, 0px)); }
+[data-platform="material"] { --counter-bottom: calc(4.1rem + env(safe-area-inset-bottom, 0px)); }
+
+.counter-bar {
+  bottom: var(--counter-bottom);
+  max-width: 42rem;
+  margin: 0 auto;
+}
+[data-platform="ios"] .counter-bar {
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  border-color: color-mix(in srgb, var(--border) 50%, transparent);
+  border-radius: 1.5rem;
+}
+[data-platform="material"] .counter-bar {
+  background: color-mix(in srgb, var(--primary) 8%, var(--card));
+  border-color: transparent;
+  box-shadow: 0 3px 6px rgb(0 0 0 / .16), 0 8px 24px rgb(0 0 0 / .18);
+}
+[data-theme="contrast"] .counter-bar {
+  background: var(--card);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: var(--border);
+}

@@ -27,4 +27,6 @@ export {
   FolderOpen,
   MoreHorizontal,
   FolderInput,
+  X,
+  RotateCcw,
 } from 'lucide-react';

@@ -1,9 +1,10 @@
-// "On the hook" — Study B.
+// Projects — Study B.
 //
-// The app is opened mid-row, with a hook in the other hand, so the first
-// thing on screen is the project you're actually making and a row counter
-// big enough to hit without looking. Browsing is demoted below it, and
-// filtering moves into a sheet so the resting surface stays quiet.
+// The app is opened mid-row with a hook in the other hand, so the counter
+// for whatever you're making floats above the tab bar rather than living
+// at the top of the page: it stays reachable however far you scroll, and
+// the list is free to show every project. Filtering stays in a sheet so
+// the resting surface stays quiet.
 
 import { useCallback, useEffect, useState } from 'react';
 import { db, settings } from '@/lib/db.js';
@@ -12,6 +13,7 @@ import { allTags, addCustomTag } from '@/lib/tags.js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { CounterBar } from '@/components/counter-bar.jsx';
 import { StatusBadge, TagList } from '@/components/badges.jsx';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,7 +21,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
 import { TagChips } from '@/components/tag-chips.jsx';
-import { Plus, Minus, Search, Filter, Repeat } from '@/lib/icons.jsx';
+import { Plus, Search, Filter, Repeat } from '@/lib/icons.jsx';
 import ProjectDialog from './ProjectDialog.jsx';
 
 export const STATUS_LABELS = {
@@ -38,91 +40,9 @@ export function getActiveId() {
 }
 export function setActiveId(id) {
   settings.set('activeProjectId', id);
-}
-
-function HeroCounter({ project, onChange, onSwitch, onOpen }) {
-  const counter = rowCounter(project);
-  const pct = counter?.target ? Math.min(100, Math.round((counter.value / counter.target) * 100)) : null;
-
-  const bump = (delta) => {
-    if (!counter) return;
-    const value = Math.max(0, counter.value + delta);
-    onChange({
-      ...project,
-      counters: project.counters.map(c => (c.id === counter.id ? { ...c, value } : c)),
-    });
-    announce(`${counter.name}: ${value}`);
-    if (counter.target && value === counter.target) {
-      announce(`${counter.name} target reached — ${value} of ${counter.target}. Lovely work!`);
-    }
-    if (navigator.vibrate) navigator.vibrate(10);
-  };
-
-  return (
-    <Card>
-      <CardContent className="grid gap-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <button
-              type="button"
-              onClick={onOpen}
-              className="text-left text-lg font-bold leading-tight underline-offset-4 hover:underline"
-            >
-              {project.name}
-            </button>
-            {project.hook && (
-              <p className="mt-0.5 text-sm text-muted-foreground">{project.hook}</p>
-            )}
-          </div>
-          <StatusBadge>{STATUS_LABELS[project.status]}</StatusBadge>
-        </div>
-
-        {counter ? (
-          <>
-            <div className="grid grid-cols-[4rem_1fr_4rem] items-center gap-3">
-              <Button
-                variant="outline"
-                className="min-h-16"
-                aria-label={`One ${counter.name.toLowerCase().replace(/s$/, '')} back`}
-                onClick={() => bump(-1)}
-              >
-                <Minus className="size-7" />
-              </Button>
-              <div className="text-center">
-                <output className="block text-4xl font-bold tabular-nums" aria-live="off">
-                  {counter.value}
-                </output>
-                <span className="text-xs uppercase tracking-wide text-muted-foreground">
-                  {counter.target ? `of ${counter.target} ${counter.name.toLowerCase()}` : counter.name.toLowerCase()}
-                </span>
-              </div>
-              <Button
-                className="min-h-16"
-                aria-label={`Count one ${counter.name.toLowerCase().replace(/s$/, '')}`}
-                onClick={() => bump(1)}
-              >
-                <Plus className="size-7" />
-              </Button>
-            </div>
-            {pct !== null && <Progress value={pct} aria-label={`${counter.name} progress`} />}
-          </>
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            This project has no counters yet — open it to add one.
-          </p>
-        )}
-
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" className="min-h-11" onClick={onOpen}>
-            Open project
-          </Button>
-          <Button variant="outline" size="sm" className="min-h-11" onClick={onSwitch}>
-            <Repeat aria-hidden="true" /> Switch
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  // Choosing what you're making is a request for its counter, so it
+  // overrides an earlier dismissal rather than leaving the bar hidden.
+  settings.set('counterDismissed', false);
 }
 
 export default function ProjectsView({ navigate }) {
@@ -136,6 +56,9 @@ export default function ProjectsView({ navigate }) {
   const [switchOpen, setSwitchOpen] = useState(false);
   const [newTagOpen, setNewTagOpen] = useState(false);
   const [newTag, setNewTag] = useState('');
+  const [dismissed, setDismissed] = useState(settings.get('counterDismissed', false));
+  const [expanded, setExpanded] = useState(settings.get('counterExpanded', false));
+  const [barHeight, setBarHeight] = useState(0);
 
   const reload = useCallback(async () => {
     const list = (await db.getAll('projects')).sort((a, b) => b.updatedAt - a.updatedAt);
@@ -172,6 +95,7 @@ export default function ProjectsView({ navigate }) {
   };
 
   const active = projects.find(p => p.id === activeId) || null;
+  const activeCounter = rowCounter(active);
   const filterCount = tagFilter.length + (statusFilter ? 1 : 0);
 
   const matches = (p) => {
@@ -183,50 +107,63 @@ export default function ProjectsView({ navigate }) {
     return true;
   };
 
-  const rest = projects.filter(p => p.id !== activeId && matches(p));
+  const shown = projects.filter(matches);
   const inProgress = projects.filter(p => p.status === 'in-progress');
 
   const pickActive = (id) => {
     setActiveId(id);
     setActive(id);
+    setDismissed(false);
     setSwitchOpen(false);
     const p = projects.find(x => x.id === id);
     announce(p ? `${p.name} is now on the hook` : 'Project changed');
   };
 
+  const barVisible = !!active && !!activeCounter && !dismissed;
+
+  const setBarExpanded = (v) => { setExpanded(v); settings.set('counterExpanded', v); };
+  const dismissBar = () => {
+    setDismissed(true);
+    settings.set('counterDismissed', true);
+    setBarExpanded(false);
+    announce('Counter hidden. Show it again from the button above the list.');
+  };
+
   return (
     <section aria-labelledby="projects-heading">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <h2 id="projects-heading">{active ? 'On the hook' : 'Projects'}</h2>
+        <h2 id="projects-heading">Projects</h2>
         <Button onClick={() => setNewOpen(true)}>
           <Plus aria-hidden="true" /> New project
         </Button>
       </div>
 
-      {active ? (
-        <HeroCounter
-          project={active}
-          onChange={saveProject}
-          onOpen={() => navigate('project-detail', active.id)}
-          onSwitch={() => setSwitchOpen(true)}
-        />
-      ) : (
+      {projects.length === 0 && (
         <Card>
-          <CardContent className="grid gap-3 text-center">
-            <p className="text-muted-foreground">
-              {projects.length
-                ? 'Nothing on the hook yet. Pick the project you’re making and its counter lives here.'
-                : 'No projects yet. Cast on your first one with “New project”.'}
-            </p>
-            {inProgress.length > 0 && (
-              <div>
-                <Button variant="outline" onClick={() => setSwitchOpen(true)}>
-                  Choose a project
-                </Button>
-              </div>
-            )}
+          <CardContent className="text-center text-muted-foreground">
+            No projects yet. Cast on your first one with “New project”.
           </CardContent>
         </Card>
+      )}
+
+      {/* Dismissing the counter must not be a dead end. */}
+      {projects.length > 0 && !barVisible && (
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => {
+            if (active && activeCounter) {
+              setDismissed(false);
+              settings.set('counterDismissed', false);
+              announce(`Counter for ${active.name} shown`);
+            } else {
+              setSwitchOpen(true);
+            }
+          }}
+        >
+          <Repeat aria-hidden="true" />
+          {active && activeCounter ? `Show counter for ${active.name}` : 'Put a project on the hook'}
+        </Button>
       )}
 
       {projects.length > 0 && (
@@ -262,17 +199,17 @@ export default function ProjectsView({ navigate }) {
           </div>
 
           <h3 className="mt-4 mb-2 flex items-center justify-between gap-2">
-            <span>{active ? 'Everything else' : 'All projects'}</span>
-            <span className="text-sm font-normal tabular-nums text-muted-foreground">{rest.length}</span>
+            <span>All projects</span>
+            <span className="text-sm font-normal tabular-nums text-muted-foreground">{shown.length}</span>
           </h3>
 
-          {rest.length === 0 ? (
+          {shown.length === 0 ? (
             <p className="py-8 text-center italic text-muted-foreground">
               Nothing matches. Clear a filter to see more.
             </p>
           ) : (
             <ul aria-label="Your projects" className="grid list-none gap-3 p-0">
-              {rest.map(p => {
+              {shown.map(p => {
                 const counter = rowCounter(p);
                 const pct = counter?.target
                   ? Math.min(100, Math.round((counter.value / counter.target) * 100)) : null;
@@ -295,6 +232,11 @@ export default function ProjectsView({ navigate }) {
                               {counter.name.toLowerCase()}
                             </span>
                           )}
+                          {p.id === activeId && barVisible && (
+                            <span className="mt-0.5 block text-sm font-semibold text-link">
+                              On the hook
+                            </span>
+                          )}
                         </button>
                         {pct !== null && <Progress value={pct} aria-label="Progress" className="mt-2" />}
                         <TagList tags={p.tags} className="mt-2" label={`Tags on ${p.name}`} />
@@ -306,6 +248,26 @@ export default function ProjectsView({ navigate }) {
             </ul>
           )}
         </>
+      )}
+
+      {/* Keeps the last card clear of the floating bar, at whatever height
+          the bar currently is — it grows with the expanded state and with
+          the user's text-size setting. */}
+      {barVisible && <div aria-hidden="true" style={{ height: barHeight + 12 }} />}
+
+      {barVisible && (
+        <CounterBar
+          project={active}
+          primary={activeCounter}
+          statusLabel={STATUS_LABELS[active.status]}
+          expanded={expanded}
+          onExpandedChange={setBarExpanded}
+          onChange={saveProject}
+          onOpen={() => navigate('project-detail', active.id)}
+          onSwitch={() => setSwitchOpen(true)}
+          onDismiss={dismissBar}
+          onHeightChange={setBarHeight}
+        />
       )}
 
       <ProjectDialog open={newOpen} onOpenChange={setNewOpen} onSave={onCreate} />
@@ -362,7 +324,7 @@ export default function ProjectsView({ navigate }) {
             </Button>
             <Button onClick={() => {
               setFilterOpen(false);
-              announce(`${rest.length} project${rest.length === 1 ? '' : 's'} shown`);
+              announce(`${shown.length} project${shown.length === 1 ? '' : 's'} shown`);
             }}>
               Show results
             </Button>

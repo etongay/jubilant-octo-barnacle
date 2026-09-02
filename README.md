@@ -11,17 +11,26 @@ app and works offline. All of your data stays on your device.
 
 ## Features
 
-### 🧺 Projects — "On the hook"
-The Projects tab opens on **the project you're actually making**, with its row
-counter already on screen. Advancing a row costs zero taps and no navigation,
-because the app gets picked up mid-row with a hook in the other hand.
+### 🧺 Projects & the counter bar
+The counter for whatever you're making **floats above the tab bar** rather
+than sitting at the top of the page, so it stays reachable however far you
+scroll. Advancing a row costs zero taps and no navigation, because the app
+gets picked up mid-row with a hook in the other hand.
 
+- **Condensed** is the count and its two buttons. **Expanded** adds the
+  target and progress, the project's other counters, and Reset / Switch /
+  Open project — the things that would otherwise cost a trip into the
+  project. The bar remembers which state you left it in.
+- **Dismiss** lives in the expanded panel, deliberately not beside the `+`,
+  where a mis-tap would hide the thing you're using. Dismissing is never a
+  dead end: a *Show counter* button sits above the list, and choosing a
+  project brings the bar back.
 - The project you last opened becomes the one on the hook (only if it's in
   progress — finishing something doesn't hijack the counter). **Switch**
   changes it deliberately.
-- Everything else sits in a list below, with **search** and a **Filter** sheet
-  for status and tags. The filter button carries a count so an active filter
-  is never invisible.
+- The list shows **every** project, with the one on the hook marked, plus
+  **search** and a **Filter** sheet for status and tags. The filter button
+  carries a count so an active filter is never invisible.
 - Each project tracks its pattern, hook size, status, tags, notes and yarn.
   Every project starts with **Rows** and **Stitches** counters; add as many
   more as you like (pattern repeats, colour changes…), each with an optional
