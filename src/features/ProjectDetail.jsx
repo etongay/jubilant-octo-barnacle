@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { ArrowLeft, Plus, Minus, Trash2, Share2, Copy, Pencil, ExternalLink } from '@/lib/icons.jsx';
 import ProjectDialog from './ProjectDialog.jsx';
-import { STATUS_LABELS } from './ProjectsView.jsx';
+import { STATUS_LABELS, setActiveId } from './ProjectsView.jsx';
 
 function Counter({ counter, onChange, onRemove }) {
   const bump = (delta) => {
@@ -74,6 +74,10 @@ export default function ProjectDetail({ id, navigate }) {
       if (!p) return navigate('projects');
       p.counters = p.counters || [];
       p.yarnIds = p.yarnIds || [];
+      p.tags = p.tags || [];
+      // Opening a live project is the clearest signal of what you're making,
+      // so the hero counter on the Projects screen follows it.
+      if (p.status === 'in-progress') setActiveId(p.id);
       setProject(p);
     });
   }, [id, navigate]);
@@ -101,9 +105,14 @@ export default function ProjectDetail({ id, navigate }) {
         <ArrowLeft aria-hidden="true" /> All projects
       </Button>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <h2 id="project-heading" className="text-xl font-bold">{project.name}</h2>
+        <h2 id="project-heading">{project.name}</h2>
         <Badge>{STATUS_LABELS[project.status]}</Badge>
       </div>
+      {project.tags.length > 0 && (
+        <ul aria-label="Tags" className="mb-3 flex list-none flex-wrap gap-1 p-0">
+          {project.tags.map(t => <li key={t}><Badge>{t}</Badge></li>)}
+        </ul>
+      )}
 
       <div className="grid gap-3">
         <Card>

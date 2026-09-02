@@ -1,8 +1,8 @@
 // Tiny IndexedDB wrapper. Everything is stored locally on the device.
 
 const DB_NAME = 'hearth-and-hook';
-const DB_VERSION = 1;
-const STORES = ['projects', 'yarn', 'patterns', 'charts', 'barcodes'];
+const DB_VERSION = 2;
+const STORES = ['projects', 'yarn', 'patterns', 'charts', 'barcodes', 'folders'];
 
 let dbPromise = null;
 

@@ -20,4 +20,11 @@ export {
   ChevronDown,
   Search,
   ExternalLink,
+  ListFilter as Filter,
+  Repeat,
+  Folder,
+  FolderPlus,
+  FolderOpen,
+  MoreHorizontal,
+  FolderInput,
 } from 'lucide-react';

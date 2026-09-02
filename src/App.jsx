@@ -21,7 +21,7 @@ const TABS = [
 ];
 
 const SUBTITLES = {
-  projects: 'Your works in progress',
+  projects: 'What you’re making now',
   'project-detail': 'Count along as you go',
   charts: 'Mosaic charts, row by row',
   'chart-reader': 'One row at a time',

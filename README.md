@@ -11,13 +11,32 @@ app and works offline. All of your data stays on your device.
 
 ## Features
 
-### 🧺 Projects & counters
-- Each project tracks its pattern, hook size, status, notes, and linked yarn.
-- Every project starts with **Rows** and **Stitches** counters; add as many
+### 🧺 Projects — "On the hook"
+The Projects tab opens on **the project you're actually making**, with its row
+counter already on screen. Advancing a row costs zero taps and no navigation,
+because the app gets picked up mid-row with a hook in the other hand.
+
+- The project you last opened becomes the one on the hook (only if it's in
+  progress — finishing something doesn't hijack the counter). **Switch**
+  changes it deliberately.
+- Everything else sits in a list below, with **search** and a **Filter** sheet
+  for status and tags. The filter button carries a count so an active filter
+  is never invisible.
+- Each project tracks its pattern, hook size, status, tags, notes and yarn.
+  Every project starts with **Rows** and **Stitches** counters; add as many
   more as you like (pattern repeats, colour changes…), each with an optional
   target and a progress bar.
 - Counter buttons are oversized for mid-stitch tapping, with gentle haptic
   feedback and screen-reader announcements of every count.
+- Statuses use crochet's own vocabulary: Planned, In progress, Finished,
+  **Hibernating** (paused) and **Frogged** (ripped back) — the words Ravelry
+  and the craft already use, rather than generic project-management ones.
+
+### 🏷 Tags
+Eight built-in tags (Blanket, Garment, Amigurumi, Gift, Quick make, Stash
+buster, Baby, Home) plus **any custom tag you invent**, addable from either
+the project form or the filter sheet. Custom tags persist independently of
+projects, so a tag survives deleting the last project that used it.
 
 ### 🔲 Mosaic chart reader
 - Create a chart grid (up to 200 × 300), or **import a photo of a chart** —
@@ -60,12 +79,18 @@ and most yarn companies don't publish one. What exists:
   is searched by name, not barcode. The app uses it to enrich details after
   a scan identifies the product name.
 
-### 📖 Pattern library
-Import patterns three ways, then tag and filter them:
+### 📖 Pattern library & folders
+Import patterns three ways, then file, tag, search and filter them:
 - **From the web** — save a link with a title and tags.
 - **Upload** — PDFs, images, or text files are stored inside the app
   (available offline).
 - **Take a photo** — opens the camera directly on phones.
+
+**Folders** sit at the top as a two-column grid. Create, rename and delete
+them freely; deleting a folder never deletes its patterns — they fall back to
+**Unfiled**, and the confirmation says so before you commit. Any pattern can
+be moved between folders, and search cuts across every folder so nothing is
+lost by being filed.
 
 Patterns can be attached to projects and open with one tap.
 
@@ -108,8 +133,8 @@ deliberately avoids — your credentials stay yours.)
   High contrast disables translucency so contrast stays guaranteed.
 - WCAG 2.2 AA throughout: all text meets contrast minimums in every theme,
   every control is keyboard-operable with visible focus, touch targets are
-  ≥44 px, counters and actions announce through a live region, dialogs are
-  real `<dialog>` elements with focus containment, reduced-motion preference
+  ≥44 px, counters and actions announce through a live region, dialogs trap
+  focus and return it to whatever opened them, reduced-motion preference
   is respected, and the chart grid exposes per-stitch labels
   ("Row 5, stitch 12, colour A, done") to screen readers.
 
@@ -147,6 +172,7 @@ src/features/                 app views: projects, counters, chart reader,
                               yarn stash + scanner, patterns, settings
 src/lib/db.js                 IndexedDB + localStorage helpers
 src/lib/lookup.js             barcode lookup chain
+src/lib/tags.js               built-in + custom project tags
 src/lib/ravelry.js            Ravelry API client + share text
 src/lib/announce.js           screen-reader live region
 src/lib/platform.js           iOS / Material / cozy skin detection
