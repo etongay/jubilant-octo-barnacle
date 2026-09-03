@@ -11,6 +11,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { announce } from '@/lib/announce.js';
+import { expectedStitches } from '@/lib/counters.js';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { StatusBadge } from '@/components/badges.jsx';
@@ -50,7 +51,8 @@ export function CounterBar({
       ...project,
       counters: project.counters.map(c => (c.id === counter.id ? { ...c, value } : c)),
     });
-    announce(`${counter.name}: ${value}`);
+    const expected = expectedStitches({ ...counter, value });
+    announce(`${counter.name}: ${value}${expected !== null ? `, about ${expected} stitches this row` : ''}`);
     if (counter.target && value === counter.target) {
       announce(`${counter.name} target reached — ${value} of ${counter.target}. Lovely work!`);
     }
@@ -141,6 +143,11 @@ export function CounterBar({
             <span className="text-xs uppercase tracking-wide text-muted-foreground">
               {primary.target ? `of ${primary.target} ${primary.name.toLowerCase()}` : primary.name.toLowerCase()}
             </span>
+            {expectedStitches(primary) !== null && (
+              <span className="mt-0.5 block text-xs text-muted-foreground">
+                ≈ {expectedStitches(primary)} stitches this row
+              </span>
+            )}
           </div>
           <Button
             className="min-h-16"

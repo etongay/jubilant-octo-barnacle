@@ -39,6 +39,16 @@ gets picked up mid-row with a hook in the other hand.
 - Statuses use crochet's own vocabulary: Planned, In progress, Finished,
   **Hibernating** (paused) and **Frogged** (ripped back) — the words Ravelry
   and the craft already use, rather than generic project-management ones.
+- **Expected stitch counts.** Give a counter a starting stitch count and an
+  optional change per row (6 for an increase round, −6 for a decrease round)
+  and it tells you what you should be counting to on the row you're on —
+  "≈ 12 sts this row" — in the counter and in the floating bar's expanded
+  panel, and reads it aloud alongside the row count. Catches a miscount
+  before it becomes six rows of frogging.
+- **Checkpoints.** Save a photo and a note pinned to a counter's current
+  value before a tricky section, so if it goes wrong you know exactly where
+  to stop — **Restore** sets the counter straight back to that value.
+  Checkpoints live on the project's detail page, under its counters.
 
 ### 🏷 Tags
 Eight built-in tags (Blanket, Garment, Amigurumi, Gift, Quick make, Stash

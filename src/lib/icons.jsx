@@ -29,4 +29,5 @@ export {
   FolderInput,
   X,
   RotateCcw,
+  Undo2,
 } from 'lucide-react';
