@@ -53,7 +53,6 @@ export default function ProjectsView({ navigate }) {
   const [tagFilter, setTagFilter] = useState([]);
   const [newOpen, setNewOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [switchOpen, setSwitchOpen] = useState(false);
   const [newTagOpen, setNewTagOpen] = useState(false);
   const [newTag, setNewTag] = useState('');
   const [dismissed, setDismissed] = useState(settings.get('counterDismissed', false));
@@ -108,16 +107,6 @@ export default function ProjectsView({ navigate }) {
   };
 
   const shown = projects.filter(matches);
-  const inProgress = projects.filter(p => p.status === 'in-progress');
-
-  const pickActive = (id) => {
-    setActiveId(id);
-    setActive(id);
-    setDismissed(false);
-    setSwitchOpen(false);
-    const p = projects.find(x => x.id === id);
-    announce(p ? `${p.name} is now on the hook` : 'Project changed');
-  };
 
   const barVisible = !!active && !!activeCounter && !dismissed;
 
@@ -147,22 +136,18 @@ export default function ProjectsView({ navigate }) {
       )}
 
       {/* Dismissing the counter must not be a dead end. */}
-      {projects.length > 0 && !barVisible && (
+      {projects.length > 0 && active && activeCounter && dismissed && (
         <Button
           variant="outline"
           className="w-full"
           onClick={() => {
-            if (active && activeCounter) {
-              setDismissed(false);
-              settings.set('counterDismissed', false);
-              announce(`Counter for ${active.name} shown`);
-            } else {
-              setSwitchOpen(true);
-            }
+            setDismissed(false);
+            settings.set('counterDismissed', false);
+            announce(`Counter for ${active.name} shown`);
           }}
         >
           <Repeat aria-hidden="true" />
-          {active && activeCounter ? `Show counter for ${active.name}` : 'Put a project on the hook'}
+          Show counter for {active.name}
         </Button>
       )}
 
@@ -264,7 +249,6 @@ export default function ProjectsView({ navigate }) {
           onExpandedChange={setBarExpanded}
           onChange={saveProject}
           onOpen={() => navigate('project-detail', active.id)}
-          onSwitch={() => setSwitchOpen(true)}
           onDismiss={dismissBar}
           onHeightChange={setBarHeight}
         />
@@ -328,52 +312,6 @@ export default function ProjectsView({ navigate }) {
             }}>
               Show results
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Switch which project the counter belongs to. */}
-      <Dialog open={switchOpen} onOpenChange={setSwitchOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>What are you making?</DialogTitle>
-            <DialogDescription>
-              Its counter moves to the top of this screen.
-            </DialogDescription>
-          </DialogHeader>
-          {inProgress.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No projects are in progress. Set a project’s status to “In progress” to put it on the hook.
-            </p>
-          ) : (
-            <ul className="grid list-none gap-2 p-0">
-              {inProgress.map(p => {
-                const counter = rowCounter(p);
-                return (
-                  <li key={p.id}>
-                    <Button
-                      variant={p.id === activeId ? 'default' : 'outline'}
-                      className="h-auto w-full justify-start py-2.5 text-left"
-                      aria-current={p.id === activeId ? 'true' : undefined}
-                      onClick={() => pickActive(p.id)}
-                    >
-                      <span className="grid gap-0.5">
-                        <span className="font-semibold">{p.name}</span>
-                        {counter && (
-                          <span className="text-xs opacity-80">
-                            {counter.value}{counter.target ? ` of ${counter.target}` : ''}{' '}
-                            {counter.name.toLowerCase()}
-                          </span>
-                        )}
-                      </span>
-                    </Button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSwitchOpen(false)}>Close</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

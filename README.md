@@ -18,16 +18,15 @@ scroll. Advancing a row costs zero taps and no navigation, because the app
 gets picked up mid-row with a hook in the other hand.
 
 - **Condensed** is the count and its two buttons. **Expanded** adds the
-  target and progress, the project's other counters, and Reset / Switch /
-  Open project — the things that would otherwise cost a trip into the
-  project. The bar remembers which state you left it in.
+  target and progress, the project's other counters, and Reset / Open
+  project — the things that would otherwise cost a trip into the project.
+  The bar remembers which state you left it in.
 - **Dismiss** lives in the expanded panel, deliberately not beside the `+`,
   where a mis-tap would hide the thing you're using. Dismissing is never a
-  dead end: a *Show counter* button sits above the list, and choosing a
-  project brings the bar back.
+  dead end: a *Show counter* button sits above the list, and opening the
+  project again brings the bar back.
 - The project you last opened becomes the one on the hook (only if it's in
-  progress — finishing something doesn't hijack the counter). **Switch**
-  changes it deliberately.
+  progress — finishing something doesn't hijack the counter).
 - The list shows **every** project, with the one on the hook marked, plus
   **search** and a **Filter** sheet for status and tags. The filter button
   carries a count so an active filter is never invisible.

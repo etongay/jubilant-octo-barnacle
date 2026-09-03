@@ -14,7 +14,7 @@ import { announce } from '@/lib/announce.js';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { StatusBadge } from '@/components/badges.jsx';
-import { Plus, Minus, ChevronUp, ChevronDown, X, RotateCcw, Repeat } from '@/lib/icons.jsx';
+import { Plus, Minus, ChevronUp, ChevronDown, X, RotateCcw } from '@/lib/icons.jsx';
 import { cn } from '@/lib/utils.js';
 
 const PANEL_ID = 'counter-bar-panel';
@@ -26,7 +26,7 @@ const singular = (name) => name.toLowerCase().replace(/s$/, '');
 
 export function CounterBar({
   project, primary, statusLabel, expanded, onExpandedChange,
-  onChange, onOpen, onSwitch, onDismiss, onHeightChange,
+  onChange, onOpen, onDismiss, onHeightChange,
 }) {
   const ref = useRef(null);
 
@@ -187,9 +187,6 @@ export function CounterBar({
             }}
           >
             <RotateCcw aria-hidden="true" /> Reset
-          </Button>
-          <Button variant="outline" size="sm" className="min-h-11" onClick={onSwitch}>
-            <Repeat aria-hidden="true" /> Switch
           </Button>
           <Button variant="outline" size="sm" className="min-h-11" onClick={onOpen}>
             Open project
