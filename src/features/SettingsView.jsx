@@ -10,9 +10,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 const THEMES = [
-  { id: 'hearth', label: 'Hearth', dot: '#f6efe6' },
+  { id: 'hearth', label: 'Hearth', dot: '#B15E3F' },
   { id: 'meadow', label: 'Meadow', dot: '#edf1e4' },
   { id: 'lavender', label: 'Lavender', dot: '#efecf5' },
   { id: 'orchid', label: 'Orchid', dot: '#8F3985' },
@@ -26,7 +27,9 @@ export default function SettingsView({ navigate }) {
   const [ravUser, setRavUser] = useState(settings.get('ravUser', ''));
   const [ravPass, setRavPass] = useState(settings.get('ravPass', ''));
   const [goupcKey, setGoupcKey] = useState(settings.get('goupcKey', ''));
-  const [ravStatus, setRavStatus] = useState('');
+  const [ravChecking, setRavChecking] = useState(false);
+  const [ravResult, setRavResult] = useState(null); // { variant: 'success'|'error', message }
+  const [importError, setImportError] = useState('');
   const [platform, setPlatform] = useState(settings.get('platform', 'auto') || 'auto');
 
   const PLATFORM_LABELS = {
@@ -123,15 +126,24 @@ export default function SettingsView({ navigate }) {
           </div>
           <div>
             <Button variant="outline" onClick={async () => {
-              setRavStatus('Checking…');
+              setRavChecking(true);
+              setRavResult(null);
               try {
-                setRavStatus(`Connected as ${await testRavelry()} ✓`);
+                const username = await testRavelry();
+                setRavResult({ variant: 'success', message: `Connected as ${username} ✓` });
               } catch (err) {
-                setRavStatus('Could not connect: ' + err.message);
+                setRavResult({ variant: 'error', message: 'Could not connect: ' + err.message });
+              } finally {
+                setRavChecking(false);
               }
             }}>Test connection</Button>
           </div>
-          <p role="status" className="text-sm">{ravStatus}</p>
+          {ravChecking && <p role="status" className="text-sm text-muted-foreground">Checking…</p>}
+          {ravResult && (
+            <Alert variant={ravResult.variant}>
+              <AlertDescription>{ravResult.message}</AlertDescription>
+            </Alert>
+          )}
         </CardContent>
       </Card>
 
@@ -171,6 +183,7 @@ export default function SettingsView({ navigate }) {
             announce('Backup downloaded');
           }}>Export backup</Button>
           <Button variant="outline" onClick={() => {
+            setImportError('');
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = 'application/json';
@@ -182,11 +195,18 @@ export default function SettingsView({ navigate }) {
                 announce('Backup imported');
                 navigate('projects');
               } catch (err) {
-                alert('Import failed: ' + err.message);
+                setImportError(err.message);
+                announce('Import failed: ' + err.message);
               }
             });
             input.click();
           }}>Import backup</Button>
+          {importError && (
+            <Alert variant="error" className="w-full">
+              <AlertTitle>Import failed</AlertTitle>
+              <AlertDescription>{importError}</AlertDescription>
+            </Alert>
+          )}
         </CardContent>
       </Card>
     </section>

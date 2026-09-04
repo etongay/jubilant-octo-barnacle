@@ -47,33 +47,58 @@
   --font-display: 'Fraunces', Georgia, 'Iowan Old Style', serif;
   --font-body: 'Nunito Sans', ui-rounded, 'Segoe UI', system-ui, sans-serif;
 
-  /* Hearth (warm cream — default) */
-  --background: #f6efe6;
-  --foreground: #3d2f23;
-  --card: #fffaf2;
-  --card-foreground: #3d2f23;
-  --popover: #fffaf2;
-  --popover-foreground: #3d2f23;
-  --primary: #7a5236;
-  --primary-foreground: #ffffff;
-  --secondary: #f1e6d6;
-  --secondary-foreground: #3d2f23;
-  --muted: #f1e6d6;
-  --muted-foreground: #63513f;
-  --accent: #f1e6d6;
-  --accent-foreground: #3d2f23;
-  --destructive: #9c3535;
-  --destructive-foreground: #ffffff;
-  --border: #cbb99f;
-  --input: #cbb99f;
-  --ring: #8c5a2b;
-  --highlight: #ffe9c4;
-  --done-overlay: rgba(61, 47, 35, 0.55);
+  /* Hearth (clay & wool — default). Ten-step primary/secondary/neutral
+     scales tuned for this app: clay-500 as primary, sage as the
+     supporting accent, undyed-wool neutrals for surface and text. */
+  --background: #F6F0E4;
+  --foreground: #3B2F26;
+  --card: #FBF8F3;
+  --card-foreground: #3B2F26;
+  --popover: #FBF8F3;
+  --popover-foreground: #3B2F26;
+  --primary: #B15E3F;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EDE3D3;
+  --secondary-foreground: #3B2F26;
+  --muted: #EDE3D3;
+  --muted-foreground: #6B5C4D;
+  --accent: #EDE3D3;
+  --accent-foreground: #3B2F26;
+  --destructive: #C4432B;
+  --destructive-foreground: #FFFFFF;
+  --destructive-tint: #FBEBE7;
+  --destructive-tint-foreground: #8F2F1D;
+  --warning: #D9A94E;
+  --warning-foreground: #3B2F26;
+  --warning-tint: #FBF3E1;
+  --warning-tint-foreground: #8A6318;
+  --info: #4A7C93;
+  --info-foreground: #FFFFFF;
+  --info-tint: #EAF1F5;
+  --info-tint-foreground: #2C4F5E;
+  --success: #4F7A3D;
+  --success-foreground: #FFFFFF;
+  --success-tint: #EDF3E7;
+  --success-tint-foreground: #325027;
+  --border: #C2AF95;
+  --input: #C2AF95;
+  --ring: #954A30;
+  --highlight: #F5E0B0;
+  --done-overlay: rgba(59, 47, 38, 0.55);
   /* Primary as *text* on a page/card background. Identical to --primary
      in every theme whose primary is dark enough to read; themes with a
-     light primary (Terracotta) override it with a deeper tone. */
+     light primary override it with a deeper tone. */
   --link: var(--primary);
   color-scheme: light;
+}
+
+/* Clay-500 reads fine as a button fill (4.6:1 with white) but falls just
+   under 4.5:1 as small text on this theme's own background/card, so link
+   text goes one step deeper. Scoped to "no data-theme set" specifically —
+   :root alone would leak into every other theme's --link, which already
+   resolves correctly through var(--primary). */
+:root:not([data-theme]) {
+  --link: #783A26;
 }
 
 [data-theme="meadow"] {
@@ -91,6 +116,25 @@
   --muted-foreground: #48583e;
   --accent: #e2e9d4;
   --accent-foreground: #26331f;
+  /* Pinned explicitly so swapping Hearth's palette can't change these by
+     falling through to :root — every other token above is already set
+     per-theme, but destructive previously relied on that fallback. */
+  --destructive: #9c3535;
+  --destructive-foreground: #ffffff;
+  --destructive-tint: #FBEBE7;
+  --destructive-tint-foreground: #8F2F1D;
+  --warning: #D9A94E;
+  --warning-foreground: #26331f;
+  --warning-tint: #FBF3E1;
+  --warning-tint-foreground: #8A6318;
+  --info: #4A7C93;
+  --info-foreground: #FFFFFF;
+  --info-tint: #EAF1F5;
+  --info-tint-foreground: #2C4F5E;
+  --success: #4F7A3D;
+  --success-foreground: #FFFFFF;
+  --success-tint: #EDF3E7;
+  --success-tint-foreground: #325027;
   --border: #b3c19e;
   --input: #b3c19e;
   --ring: #37502c;
@@ -113,6 +157,22 @@
   --muted-foreground: #574d6d;
   --accent: #e4dfef;
   --accent-foreground: #322b40;
+  --destructive: #9c3535;
+  --destructive-foreground: #ffffff;
+  --destructive-tint: #FBEBE7;
+  --destructive-tint-foreground: #8F2F1D;
+  --warning: #D9A94E;
+  --warning-foreground: #322b40;
+  --warning-tint: #FBF3E1;
+  --warning-tint-foreground: #8A6318;
+  --info: #4A7C93;
+  --info-foreground: #FFFFFF;
+  --info-tint: #EAF1F5;
+  --info-tint-foreground: #2C4F5E;
+  --success: #4F7A3D;
+  --success-foreground: #FFFFFF;
+  --success-tint: #EDF3E7;
+  --success-tint-foreground: #325027;
   --border: #b8aed0;
   --input: #b8aed0;
   --ring: #4a3a6b;
@@ -142,6 +202,20 @@
   --accent-foreground: #25283D;
   --destructive: #9C3535;
   --destructive-foreground: #FFFFFF;
+  --destructive-tint: #FBEBE7;
+  --destructive-tint-foreground: #8F2F1D;
+  --warning: #D9A94E;
+  --warning-foreground: #25283D;
+  --warning-tint: #FBF3E1;
+  --warning-tint-foreground: #8A6318;
+  --info: #4A7C93;
+  --info-foreground: #FFFFFF;
+  --info-tint: #EAF1F5;
+  --info-tint-foreground: #2C4F5E;
+  --success: #4F7A3D;
+  --success-foreground: #FFFFFF;
+  --success-tint: #EDF3E7;
+  --success-tint-foreground: #325027;
   --border: #946C7C;
   --input: #946C7C;
   --ring: #8F3985;
@@ -166,6 +240,22 @@
   --accent-foreground: #f1e9dc;
   --destructive: #e08585;
   --destructive-foreground: #211e1a;
+  /* Dark theme: semantic colors invert to a dark tinted wash with a
+     light, saturated foreground, instead of light-tint-on-dark-text. */
+  --destructive-tint: #402420;
+  --destructive-tint-foreground: #e08585;
+  --warning: #e8bd85;
+  --warning-foreground: #211e1a;
+  --warning-tint: #3d3020;
+  --warning-tint-foreground: #e8bd85;
+  --info: #8fb8d9;
+  --info-foreground: #211e1a;
+  --info-tint: #1f2d38;
+  --info-tint-foreground: #a8cbe3;
+  --success: #9dc98a;
+  --success-foreground: #211e1a;
+  --success-tint: #24301f;
+  --success-tint-foreground: #b9dba8;
   --border: #5d5344;
   --input: #5d5344;
   --ring: #e8bd85;
@@ -191,6 +281,22 @@
   --accent-foreground: #000000;
   --destructive: #a50000;
   --destructive-foreground: #ffffff;
+  /* High contrast leans on black text at near-max ratios rather than a
+     colored foreground, so semantics never rest on hue perception alone. */
+  --destructive-tint: #FFEDEA;
+  --destructive-tint-foreground: #000000;
+  --warning: #7A5900;
+  --warning-foreground: #ffffff;
+  --warning-tint: #FFF6DC;
+  --warning-tint-foreground: #000000;
+  --info: #004C8C;
+  --info-foreground: #ffffff;
+  --info-tint: #E8F4FF;
+  --info-tint-foreground: #000000;
+  --success: #146C2E;
+  --success-foreground: #ffffff;
+  --success-tint: #E6F7E6;
+  --success-tint-foreground: #000000;
   --border: #000000;
   --input: #000000;
   --ring: #0000cc;
@@ -215,6 +321,20 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-tint: var(--destructive-tint);
+  --color-destructive-tint-foreground: var(--destructive-tint-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-tint: var(--warning-tint);
+  --color-warning-tint-foreground: var(--warning-tint-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-tint: var(--info-tint);
+  --color-info-tint-foreground: var(--info-tint-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-tint: var(--success-tint);
+  --color-success-tint-foreground: var(--success-tint-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

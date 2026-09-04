@@ -136,10 +136,14 @@ deliberately avoids — your credentials stay yours.)
   relying on size alone. Both are self-hosted (latin + latin-ext variable
   subsets, ~90 KB for a typical device) and precached, so the app keeps its
   voice offline.
-- Six themes — **Hearth** (warm cream), **Meadow**, **Lavender**,
-  **Orchid** (blush and plum), **Night** (dark), and **High contrast** —
-  plus three text sizes. The default follows your system's light/dark
-  preference.
+- Six themes — **Hearth** (clay rust and wool, the default), **Meadow**,
+  **Lavender**, **Orchid** (blush and plum), **Night** (dark), and
+  **High contrast** — plus three text sizes. The default follows your
+  system's light/dark preference.
+- Feedback banners (Ravelry connection results, backup import errors) use a
+  shared **error / warning / info / success** token set that's tuned per
+  theme rather than fixed to one palette, so a banner reads correctly in
+  Night or High contrast the same as in Hearth.
 - **Platform-adaptive design**: on iPhone the app wears an iOS 26
   liquid-glass skin (translucent blurred surfaces, floating capsule tab
   bar, bottom-sheet dialogs, large-title header); on Android it follows
@@ -185,10 +189,11 @@ src/app.css                   type system, theme tokens (six palettes),
                               platform skins
 src/components/ui/            shadcn/ui components (button, card, dialog,
                               input, label, select, textarea, checkbox,
-                              radio-group, progress, badge)
+                              radio-group, progress, badge, alert)
 src/features/                 app views: projects, counters, chart reader,
                               yarn stash + scanner, patterns, settings
 src/lib/db.js                 IndexedDB + localStorage helpers
+src/lib/counters.js           expected-stitch-count math
 src/lib/lookup.js             barcode lookup chain
 src/lib/tags.js               built-in + custom project tags
 src/lib/ravelry.js            Ravelry API client + share text
