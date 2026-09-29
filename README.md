@@ -112,12 +112,16 @@ lost by being filed.
 
 **Opening an uploaded pattern reads it in the app** — a built-in viewer for
 PDFs, images and text files, instead of handing the file off to a new tab.
-A PDF pattern gets its own **page bookmark**: a stepper (same shape as every
-other counter in the app) records which page you're on as you read, so
-leaving the pattern and coming back later picks up from there automatically
-rather than starting over at page one. Bumping the count never disrupts the
-page you're actually looking at — it only updates the bookmark; a "Jump
-viewer to page N" button appears if you want the viewer itself to follow.
+A PDF pattern gets its own **place marker**: tap anywhere on the rendered
+page to drop a pin at that exact spot — not just a page number, since one
+page often holds several steps. The pin's position is stored as a fraction
+of the page's width and height, so it lands in the same place no matter what
+size screen you reopen it on. Leaving the pattern and coming back later —
+even months later, for a project picked back up mid-way — scrolls straight
+to the marked page with the pin already there. A page stepper still moves
+through the document without disturbing the mark, a "Mark this page" button
+drops a pin at page centre for anyone without a pointer (its focus then
+lets the arrow keys nudge it into place), and "Clear mark" removes it.
 "Open in new tab" stays available underneath, for anything better read full
 screen or in a dedicated PDF app.
 

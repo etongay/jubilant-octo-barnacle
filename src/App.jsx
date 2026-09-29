@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { Basket, Grid2x2, Volleyball, BookOpen, Settings } from './lib/icons.jsx';
 import { settings } from './lib/db.js';
 import { registerAnnouncer } from './lib/announce.js';
@@ -9,9 +9,13 @@ import ChartsView from './features/ChartsView.jsx';
 import ChartReader from './features/ChartReader.jsx';
 import YarnView from './features/YarnView.jsx';
 import PatternsView from './features/PatternsView.jsx';
-import PatternViewer from './features/PatternViewer.jsx';
 import SettingsView from './features/SettingsView.jsx';
 import { cn } from './lib/utils.js';
+
+// pdf.js (behind PatternViewer) is ~1MB — split out of the main bundle so
+// every other screen doesn't pay for it, and only fetched the moment
+// someone actually opens a pattern.
+const PatternViewer = lazy(() => import('./features/PatternViewer.jsx'));
 
 const TABS = [
   { id: 'projects', label: 'Projects', icon: Basket },
@@ -87,7 +91,11 @@ export default function App() {
         {route.view === 'chart-reader' && <ChartReader id={route.id} navigate={navigate} />}
         {route.view === 'yarn' && <YarnView />}
         {route.view === 'patterns' && <PatternsView navigate={navigate} />}
-        {route.view === 'pattern-viewer' && <PatternViewer id={route.id} navigate={navigate} />}
+        {route.view === 'pattern-viewer' && (
+          <Suspense fallback={<p className="py-8 text-center text-muted-foreground">Loading…</p>}>
+            <PatternViewer id={route.id} navigate={navigate} />
+          </Suspense>
+        )}
         {route.view === 'more' && <SettingsView navigate={navigate} />}
       </main>
 

@@ -30,4 +30,5 @@ export {
   X,
   RotateCcw,
   Undo2,
+  MapPin,
 } from 'lucide-react';
