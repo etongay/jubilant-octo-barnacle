@@ -34,7 +34,7 @@ const SOURCE_LABEL = { url: 'Web link', file: 'File', photo: 'Photo' };
 
 const parseTags = (raw) => (raw || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
 
-export default function PatternsView() {
+export default function PatternsView({ navigate }) {
   const [patterns, setPatterns] = useState([]);
   const [folders, setFolders] = useState([]);
   const [openFolder, setOpenFolder] = useState(null); // null = all, or a folder id / UNFILED
@@ -103,7 +103,7 @@ export default function PatternsView() {
 
   const openPattern = (p) => {
     if (p.url) window.open(p.url, '_blank', 'noopener');
-    else if (p.blob) window.open(URL.createObjectURL(p.blob), '_blank');
+    else if (p.blob) navigate('pattern-viewer', p.id);
   };
 
   const saveFolder = async (e) => {
@@ -350,7 +350,7 @@ export default function PatternsView() {
             <DialogDescription>
               {capture
                 ? 'Snap a picture of a printed pattern.'
-                : 'PDFs, images and text files are stored in the app and work offline.'}
+                : 'PDFs, images and text files are stored in the app and work offline — PDFs open in a built-in reader that remembers what page you were on.'}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={saveFile} className="grid gap-4">

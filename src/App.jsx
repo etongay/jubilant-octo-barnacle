@@ -9,6 +9,7 @@ import ChartsView from './features/ChartsView.jsx';
 import ChartReader from './features/ChartReader.jsx';
 import YarnView from './features/YarnView.jsx';
 import PatternsView from './features/PatternsView.jsx';
+import PatternViewer from './features/PatternViewer.jsx';
 import SettingsView from './features/SettingsView.jsx';
 import { cn } from './lib/utils.js';
 
@@ -27,6 +28,7 @@ const SUBTITLES = {
   'chart-reader': 'One row at a time',
   yarn: 'Your yarn stash',
   patterns: 'Your pattern library',
+  'pattern-viewer': 'Reading a pattern',
   more: 'Make it yours',
 };
 
@@ -59,7 +61,8 @@ export default function App() {
 
   const activeTab =
     route.view.startsWith('project') ? 'projects' :
-    route.view.startsWith('chart') ? 'charts' : route.view;
+    route.view.startsWith('chart') ? 'charts' :
+    route.view.startsWith('pattern') ? 'patterns' : route.view;
 
   return (
     <div className="app-shell mx-auto max-w-2xl pb-24">
@@ -83,7 +86,8 @@ export default function App() {
         {route.view === 'charts' && <ChartsView navigate={navigate} />}
         {route.view === 'chart-reader' && <ChartReader id={route.id} navigate={navigate} />}
         {route.view === 'yarn' && <YarnView />}
-        {route.view === 'patterns' && <PatternsView />}
+        {route.view === 'patterns' && <PatternsView navigate={navigate} />}
+        {route.view === 'pattern-viewer' && <PatternViewer id={route.id} navigate={navigate} />}
         {route.view === 'more' && <SettingsView navigate={navigate} />}
       </main>
 

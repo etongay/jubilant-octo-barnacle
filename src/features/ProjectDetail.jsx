@@ -286,7 +286,7 @@ export default function ProjectDetail({ id, navigate }) {
                   {pattern.title} <ExternalLink className="size-4" aria-hidden="true" />
                 </a>
               ) : (
-                <Button variant="outline" onClick={() => window.open(URL.createObjectURL(pattern.blob), '_blank')}>
+                <Button variant="outline" onClick={() => navigate('pattern-viewer', pattern.id)}>
                   Open “{pattern.title}”
                 </Button>
               )

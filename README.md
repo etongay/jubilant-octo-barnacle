@@ -110,6 +110,17 @@ them freely; deleting a folder never deletes its patterns — they fall back to
 be moved between folders, and search cuts across every folder so nothing is
 lost by being filed.
 
+**Opening an uploaded pattern reads it in the app** — a built-in viewer for
+PDFs, images and text files, instead of handing the file off to a new tab.
+A PDF pattern gets its own **page bookmark**: a stepper (same shape as every
+other counter in the app) records which page you're on as you read, so
+leaving the pattern and coming back later picks up from there automatically
+rather than starting over at page one. Bumping the count never disrupts the
+page you're actually looking at — it only updates the bookmark; a "Jump
+viewer to page N" button appears if you want the viewer itself to follow.
+"Open in new tab" stays available underneath, for anything better read full
+screen or in a dedicated PDF app.
+
 Patterns can be attached to projects and open with one tap.
 
 ### 🔗 Ravelry connection
