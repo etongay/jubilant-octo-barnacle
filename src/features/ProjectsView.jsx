@@ -40,7 +40,7 @@ function hashHue(seed) {
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
   return h % 360;
 }
-function coverStyle(project) {
+export function coverStyle(project) {
   const hue = hashHue(project.id || project.name || '');
   return { background: `linear-gradient(135deg, hsl(${hue} 60% 72%), hsl(${(hue + 44) % 360} 65% 50%))` };
 }

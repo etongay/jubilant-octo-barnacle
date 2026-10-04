@@ -8,6 +8,7 @@ import ChartsView from './features/ChartsView.jsx';
 import ChartReader from './features/ChartReader.jsx';
 import YarnView from './features/YarnView.jsx';
 import PatternsView from './features/PatternsView.jsx';
+import PatternDetail from './features/PatternDetail.jsx';
 import SettingsView from './features/SettingsView.jsx';
 import { cn } from './lib/utils.js';
 
@@ -31,9 +32,12 @@ const SUBTITLES = {
   'chart-reader': 'One row at a time',
   yarn: 'Your yarn stash',
   patterns: 'Your pattern library',
+  'pattern-detail': 'Pattern details',
   'pattern-viewer': 'Reading a pattern',
   more: 'Make it yours',
 };
+
+const CHILD_PAGES = new Set(['pattern-detail']);
 
 export default function App() {
   const [route, setRoute] = useState({ view: 'projects', id: null });
@@ -75,10 +79,14 @@ export default function App() {
         Skip to main content
       </a>
 
-      <header className="px-4 pt-4 pb-1 text-center">
-        <h1 className="text-2xl font-bold">Woolgaze</h1>
-        <p className="text-sm text-muted-foreground">{SUBTITLES[route.view] || ''}</p>
-      </header>
+      {/* Child pages carry their own floating back button in place of the
+          app header, so the page reads as a step down, not a new tab. */}
+      {!CHILD_PAGES.has(route.view) && (
+        <header className="px-4 pt-4 pb-1 text-center">
+          <h1 className="text-2xl font-bold">Woolgaze</h1>
+          <p className="text-sm text-muted-foreground">{SUBTITLES[route.view] || ''}</p>
+        </header>
+      )}
 
       <main id="main" ref={mainRef} tabIndex={-1} className="px-4 py-3 outline-none">
         {route.view === 'projects' && <ProjectsView navigate={navigate} />}
@@ -87,6 +95,7 @@ export default function App() {
         {route.view === 'chart-reader' && <ChartReader id={route.id} navigate={navigate} />}
         {route.view === 'yarn' && <YarnView />}
         {route.view === 'patterns' && <PatternsView navigate={navigate} />}
+        {route.view === 'pattern-detail' && <PatternDetail key={route.id} id={route.id} navigate={navigate} />}
         {route.view === 'pattern-viewer' && (
           <Suspense fallback={<p className="py-8 text-center text-muted-foreground">Loading…</p>}>
             <PatternViewer id={route.id} navigate={navigate} />

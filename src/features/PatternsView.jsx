@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dialog';
 import {
   LinkIcon, FileText, Camera, Trash2, Plus, Search,
-  Folder, FolderPlus, FolderOpen, MoreHorizontal, FolderInput, Pencil, ArrowLeft,
+  Folder, FolderPlus, FolderOpen, MoreHorizontal, Pencil, ArrowLeft,
 } from '@/lib/icons.jsx';
 
 const UNFILED = '__unfiled__';
@@ -50,7 +50,6 @@ export default function PatternsView({ navigate }) {
   const [folderDraft, setFolderDraft] = useState({ id: null, name: '' });
   const [manageFolder, setManageFolder] = useState(null);
   const [deleteFolder, setDeleteFolder] = useState(null);
-  const [movePattern, setMovePattern] = useState(null);
 
   const reload = useCallback(async () => {
     const [pats, fldrs] = await Promise.all([db.getAll('patterns'), db.getAll('folders')]);
@@ -101,10 +100,7 @@ export default function PatternsView({ navigate }) {
     setFileOpen(true);
   };
 
-  const openPattern = (p) => {
-    if (p.url) window.open(p.url, '_blank', 'noopener');
-    else if (p.blob) navigate('pattern-viewer', p.id);
-  };
+  const openPattern = (p) => navigate('pattern-detail', p.id);
 
   const saveFolder = async (e) => {
     e.preventDefault();
@@ -265,14 +261,17 @@ export default function PatternsView({ navigate }) {
             const folder = folders.find(f => f.id === p.folderId);
             return (
               <li key={p.id}>
-                <Card className="py-0">
+                {/* The title button's ::after stretches over the whole card, so
+                    tapping the tags opens the pattern too; the tags stay
+                    outside the button because a list can't live inside one. */}
+                <Card className="relative py-0">
                   <CardContent className="flex items-start gap-2 px-3 py-3">
                     <div className="min-w-0 flex-1">
                       <button
                         type="button"
                         onClick={() => openPattern(p)}
-                        className="w-full rounded-lg text-left"
-                        aria-label={`Open ${p.title}, ${SOURCE_LABEL[p.source]}`}
+                        className="w-full rounded-lg text-left after:absolute after:inset-0 after:rounded-[inherit] after:content-['']"
+                        aria-label={`${p.title}, ${SOURCE_LABEL[p.source] || 'Pattern'} — view details`}
                       >
                         <span className="flex items-start gap-2 font-semibold">
                           <span className="mt-0.5 shrink-0">{SOURCE_ICON[p.source]}</span>
@@ -285,22 +284,6 @@ export default function PatternsView({ navigate }) {
                       </button>
                       <TagList tags={p.tags} className="mt-1.5" label={`Tags on ${p.title}`} />
                     </div>
-                    <Button variant="ghost" size="icon" aria-label={`Move ${p.title} to a folder`} onClick={() => setMovePattern(p)}>
-                      <FolderInput aria-hidden="true" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label={`Delete pattern ${p.title}`}
-                      onClick={async () => {
-                        if (!confirm(`Delete pattern “${p.title}”?`)) return;
-                        await db.delete('patterns', p.id);
-                        announce('Pattern deleted');
-                        reload();
-                      }}
-                    >
-                      <Trash2 aria-hidden="true" />
-                    </Button>
                   </CardContent>
                 </Card>
               </li>
@@ -459,37 +442,6 @@ export default function PatternsView({ navigate }) {
         </DialogContent>
       </Dialog>
 
-      {/* ---------- Move a pattern ---------- */}
-      <Dialog open={!!movePattern} onOpenChange={o => !o && setMovePattern(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Move “{movePattern?.title}”</DialogTitle>
-            <DialogDescription>Choose the folder it belongs in.</DialogDescription>
-          </DialogHeader>
-          <ul className="grid list-none gap-2 p-0">
-            {[{ id: null, name: 'Unfiled' }, ...folders].map(f => (
-              <li key={f.id || 'unfiled'}>
-                <Button
-                  variant={(movePattern?.folderId || null) === f.id ? 'default' : 'outline'}
-                  className="w-full justify-start"
-                  aria-current={(movePattern?.folderId || null) === f.id ? 'true' : undefined}
-                  onClick={async () => {
-                    await db.put('patterns', { ...movePattern, folderId: f.id });
-                    announce(`${movePattern.title} moved to ${f.name}`);
-                    setMovePattern(null);
-                    reload();
-                  }}
-                >
-                  <Folder aria-hidden="true" /> {f.name}
-                </Button>
-              </li>
-            ))}
-          </ul>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setMovePattern(null)}>Cancel</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </section>
   );
 }
