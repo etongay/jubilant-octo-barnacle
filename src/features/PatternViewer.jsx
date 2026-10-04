@@ -163,8 +163,8 @@ export default function PatternViewer({ id, navigate }) {
   return (
     <section aria-labelledby="viewer-heading">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <Button variant="outline" onClick={() => navigate('patterns')}>
-          <ArrowLeft aria-hidden="true" /> All patterns
+        <Button variant="outline" onClick={() => navigate('pattern-detail', pattern.id)}>
+          <ArrowLeft aria-hidden="true" /> Pattern details
         </Button>
         {blobUrl && (
           <Button variant="outline" asChild>

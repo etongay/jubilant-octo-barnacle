@@ -31,4 +31,6 @@ export {
   RotateCcw,
   Undo2,
   MapPin,
+  ChevronLeft,
+  Upload,
 } from 'lucide-react';

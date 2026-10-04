@@ -101,10 +101,7 @@ export default function PatternsView({ navigate }) {
     setFileOpen(true);
   };
 
-  const openPattern = (p) => {
-    if (p.url) window.open(p.url, '_blank', 'noopener');
-    else if (p.blob) navigate('pattern-viewer', p.id);
-  };
+  const openPattern = (p) => navigate('pattern-detail', p.id);
 
   const saveFolder = async (e) => {
     e.preventDefault();
@@ -272,7 +269,7 @@ export default function PatternsView({ navigate }) {
                         type="button"
                         onClick={() => openPattern(p)}
                         className="w-full rounded-lg text-left"
-                        aria-label={`Open ${p.title}, ${SOURCE_LABEL[p.source]}`}
+                        aria-label={`${p.title}, ${SOURCE_LABEL[p.source] || 'Pattern'} — view details`}
                       >
                         <span className="flex items-start gap-2 font-semibold">
                           <span className="mt-0.5 shrink-0">{SOURCE_ICON[p.source]}</span>
