@@ -256,8 +256,44 @@ header h1 {
   }
 }
 
-[data-slot="select-content"] {
+[data-slot="select-content"],
+[data-slot="dropdown-menu-content"] {
   border-radius: var(--radius-lg);
+}
+
+/* Floating nav-bar controls on child pages (back, options). Always Liquid
+   Glass, whichever finish the rest of the app uses: they float over
+   scrolling content, so a translucent, blurred capsule keeps them legible
+   over a photo or a page of pattern text without blocking it out. The
+   inset highlight is the "lensing" rim; the blur does the real work. */
+.glass-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--ws-radius-full);
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--card) 62%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.8);
+  backdrop-filter: blur(18px) saturate(1.8);
+  border: 1px solid color-mix(in srgb, var(--card) 70%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    inset 0 -1px 0 rgb(0 0 0 / 0.04),
+    0 4px 16px rgb(0 0 0 / 0.12);
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+.glass-control:active { transform: scale(0.94); }
+.glass-control[data-state="open"] { background: color-mix(in srgb, var(--card) 85%, transparent); }
+.glass-control-wide { padding: 0 1.1rem; }
+@media (prefers-color-scheme: dark) {
+  .glass-control {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.14),
+      0 4px 16px rgb(0 0 0 / 0.4);
+  }
 }
 
 .tab-bar {
@@ -300,7 +336,8 @@ header h1 {
   background: var(--popover);
   box-shadow: 0 -4px 24px rgb(0 0 0 / 0.1);
 }
-[data-slot="select-content"] {
+[data-slot="select-content"],
+[data-slot="dropdown-menu-content"] {
   background: var(--popover);
   border: 1px solid var(--border);
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
@@ -329,7 +366,8 @@ header h1 {
   -webkit-backdrop-filter: blur(24px) saturate(1.8);
   backdrop-filter: blur(24px) saturate(1.8);
 }
-[data-surface="glass"] [data-slot="select-content"] {
+[data-surface="glass"] [data-slot="select-content"],
+[data-surface="glass"] [data-slot="dropdown-menu-content"] {
   background: color-mix(in srgb, var(--popover) 85%, transparent);
   -webkit-backdrop-filter: blur(20px) saturate(1.8);
   backdrop-filter: blur(20px) saturate(1.8);
@@ -356,6 +394,8 @@ header h1 {
   [data-slot="card"],
   [data-slot="dialog-content"],
   [data-slot="select-content"],
+  [data-slot="dropdown-menu-content"],
+  .glass-control,
   .tab-bar,
   .counter-bar {
     background: Canvas;
