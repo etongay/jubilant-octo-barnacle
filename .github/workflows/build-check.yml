@@ -1,0 +1,25 @@
+name: Build check
+
+# Builds every pull request so a broken build is caught before merge —
+# the Pages deploy only runs after a merge, when it's already live.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
