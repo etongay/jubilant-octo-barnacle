@@ -62,6 +62,6 @@ export async function buildShareText(project) {
     lines.push('Progress: ' + counters.map(c => `${c.value}${c.target ? '/' + c.target : ''} ${c.name.toLowerCase()}`).join(', '));
   }
   if (project.notes) lines.push('', 'Notes: ' + project.notes);
-  lines.push('', '— tracked with Hearth & Hook');
+  lines.push('', '— tracked with Woolgaze');
   return lines.join('\n');
 }

@@ -1,5 +1,11 @@
 // Tiny IndexedDB wrapper. Everything is stored locally on the device.
 
+// Deliberately left as the app's original name, not renamed to Woolgaze:
+// this is IndexedDB's own database identifier, and anyone who already has
+// the app installed has their projects/yarn/patterns stored under it —
+// changing it would silently orphan all of that data behind an empty new
+// database. Invisible to users either way; only touch it with a real
+// migration, not a rename.
 const DB_NAME = 'hearth-and-hook';
 const DB_VERSION = 2;
 const STORES = ['projects', 'yarn', 'patterns', 'charts', 'barcodes', 'folders'];
@@ -52,7 +58,7 @@ export const db = {
     return tx(store, 'readwrite', s => s.delete(id));
   },
   async exportAll() {
-    const out = { app: 'hearth-and-hook', version: DB_VERSION, exportedAt: new Date().toISOString() };
+    const out = { app: 'woolgaze', version: DB_VERSION, exportedAt: new Date().toISOString() };
     for (const name of STORES) {
       if (name === 'patterns') {
         // Blobs can't go into JSON; encode file bytes as base64.
@@ -75,7 +81,11 @@ export const db = {
     return out;
   },
   async importAll(data) {
-    if (data.app !== 'hearth-and-hook') throw new Error('Not a Hearth & Hook backup file.');
+    // Accept backups tagged with the app's old name too, so a file
+    // exported before the Woolgaze rename still imports.
+    if (data.app !== 'woolgaze' && data.app !== 'hearth-and-hook') {
+      throw new Error('Not a Woolgaze backup file.');
+    }
     for (const name of STORES) {
       for (const item of data[name] || []) {
         if (item.blobB64) {

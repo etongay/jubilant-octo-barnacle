@@ -1,4 +1,4 @@
-# 🧶 Hearth & Hook
+# 🧶 Woolgaze
 
 A cozy crochet companion for your phone. Track projects with stitch and row
 counters, manage your yarn stash by scanning ball-band barcodes, read mosaic
@@ -141,39 +141,42 @@ into a new Ravelry project. (Creating Ravelry projects fully automatically
 requires OAuth with a server-held secret, which a serverless, on-device app
 deliberately avoids — your credentials stay yours.)
 
-### 🎨 Cozy by design, accessible by default
-- **Typography**: headings are set in [Fraunces](https://fonts.google.com/specimen/Fraunces)
-  with its `SOFT` axis at 100 — rounded, friendly terminals — while body
-  copy and controls use [Nunito Sans](https://fonts.google.com/specimen/Nunito+Sans),
-  a humanist sans with a tall x-height and open apertures that stays
-  comfortable over long stretches of pattern notes. The serif/sans pairing
-  is what carries the heading hierarchy, so headings stay distinct without
-  relying on size alone. Both are self-hosted (latin + latin-ext variable
-  subsets, ~90 KB for a typical device) and precached, so the app keeps its
-  voice offline.
-- Six themes — **Hearth** (clay rust and wool, the default), **Meadow**,
-  **Lavender**, **Orchid** (blush and plum), **Night** (dark), and
-  **High contrast** — plus three text sizes. The default follows your
-  system's light/dark preference.
-- Feedback banners (Ravelry connection results, backup import errors) use a
-  shared **error / warning / info / success** token set that's tuned per
-  theme rather than fixed to one palette, so a banner reads correctly in
-  Night or High contrast the same as in Hearth.
-- **Platform-adaptive design**: on iPhone the app wears an iOS 26
-  liquid-glass skin (translucent blurred surfaces, floating capsule tab
-  bar, bottom-sheet dialogs, large-title header); on Android it follows
-  Material 3 (tonal elevated surfaces, full-pill buttons, navigation-bar
-  active indicator, 28dp dialogs). The skins change shape and surface, not
-  type — the Fraunces/Nunito Sans voice stays constant so the app reads as
-  itself on every device. Detection is automatic, and **More → App style**
-  can pin any skin. All six colour themes flow through every skin, and
-  High contrast disables translucency so contrast stays guaranteed.
-- WCAG 2.2 AA throughout: all text meets contrast minimums in every theme,
-  every control is keyboard-operable with visible focus, touch targets are
-  ≥44 px, counters and actions announce through a live region, dialogs trap
-  focus and return it to whatever opened them, reduced-motion preference
-  is respected, and the chart grid exposes per-stitch labels
-  ("Row 5, stitch 12, colour A, done") to screen readers.
+### 🎨 Design system: Mint, Orange & Olive, iOS-shaped
+Full token documentation lives in [`design-system.md`](./design-system.md); the summary:
+- **One shape language, native to iPhone**: capsule buttons, bottom-sheet
+  dialogs with a grabber, grouped-inset form fields, floating tab bar,
+  large-title header — applied everywhere rather than switched per
+  platform. It ships in a **flat** finish (opaque surfaces, a plain
+  shadow) by default; add `data-surface="glass"` to `<html>` for the
+  translucent, blurred Liquid Glass alternative — same shapes and radii
+  in both.
+- **Colour**: [Radix UI](https://www.radix-ui.com/colors)'s **Mint** is
+  the primary brand colour, **Orange** a secondary accent, **Olive** the
+  full neutral scale (background, surface, borders, body text); status
+  feedback uses Red/Yellow/Blue/Green. All matched 12-step light/dark
+  pairs, so the app switches with your system's light/dark setting
+  automatically rather than needing a theme picker. Buttons and banners
+  share one formula — a family's light step 4 as the fill, its dark step
+  12 as the text — verified at 9:1+ contrast in every family, in both
+  modes; three families (Orange, Yellow, and Green by a hair) needed step
+  12 instead of the usual step 11 for standalone coloured text, caught by
+  computing the WCAG 2.1 relative-luminance formula rather than
+  eyeballing it.
+- **Typography**: [Fraunces](https://fonts.google.com/specimen/Fraunces)
+  semibold for headlines, [Nunito Sans](https://fonts.google.com/specimen/Nunito+Sans)
+  for body copy — both self-hosted, open-source variable fonts.
+- Feedback banners (Ravelry connection results, backup import errors) use
+  the same error/warning/info/success tokens as every other accent, so a
+  banner reads correctly in light or dark without a separate palette.
+- Three text sizes, independent of the colour scheme.
+- WCAG 2.2 AA throughout: all text meets contrast minimums in both light
+  and dark, every control is keyboard-operable with visible focus, touch
+  targets are ≥44 px, counters and actions announce through a live region,
+  dialogs trap focus and return it to whatever opened them, reduced-motion
+  preference is respected, forced-colors mode (Windows High Contrast)
+  gets opaque bordered surfaces regardless of finish, and the chart grid
+  exposes per-stitch labels ("Row 5, stitch 12, colour A, done") to
+  screen readers.
 
 ### 💾 Your data
 Everything is stored on-device in IndexedDB. **More → Your data** exports a
@@ -199,12 +202,18 @@ Pushing to the deploy branch publishes automatically to GitHub Pages via
 ```
 index.html                    entry document
 src/main.jsx                  React bootstrap
-src/App.jsx                   navigation shell, tab bar, theming
-src/app.css                   type system, theme tokens (six palettes),
-                              platform skins
-src/components/ui/            shadcn/ui components (button, card, dialog,
-                              input, label, select, textarea, checkbox,
-                              radio-group, progress, badge, alert)
+src/App.jsx                   navigation shell, tab bar
+src/tokens.css                Mint/Orange/Olive + status design tokens
+                              (light + dark), type scale, spacing & radius
+                              — see design-system.md
+src/app.css                   adapts tokens.css to the shadcn-convention
+                              variable names, the iOS-shaped surface rules
+                              (cards, dialogs, tab bar, inputs) in both
+                              flat (default) and Liquid Glass finishes
+src/components/ui/            shadcn-style components, re-skinned for the
+                              above (button, card, dialog, input, label,
+                              select, textarea, checkbox, progress, badge,
+                              alert)
 src/features/                 app views: projects, counters, chart reader,
                               yarn stash + scanner, patterns, settings
 src/lib/db.js                 IndexedDB + localStorage helpers
@@ -213,12 +222,13 @@ src/lib/lookup.js             barcode lookup chain
 src/lib/tags.js               built-in + custom project tags
 src/lib/ravelry.js            Ravelry API client + share text
 src/lib/announce.js           screen-reader live region
-src/lib/platform.js           iOS / Material / cozy skin detection
-src/assets/fonts/             self-hosted variable font subsets
 public/manifest.webmanifest   PWA install metadata (SW via vite-plugin-pwa)
+design-system.md              full design token documentation
 ```
 
-The shadcn components live in `src/components/ui/` in the usual copy-in
-style, themed through the standard shadcn CSS variables (`--background`,
-`--primary`, `--ring`, …) so every component follows all five themes
-automatically.
+The components in `src/components/ui/` keep their original Radix UI
+primitives underneath (Dialog, Select, Checkbox, …) for accessible
+keyboard/screen-reader behaviour — only the visual layer changed, themed
+through the same CSS variables (`--background`, `--primary`, `--ring`, …)
+derived from Mint, Orange and Olive, so every component follows the one
+light/dark pair automatically.

@@ -1,307 +1,76 @@
 @import "tailwindcss";
+@import "./tokens.css";
 
-/* Self-hosted so the app keeps its voice offline (latin + latin-ext only;
-   unicode-range means a device downloads just the subset it needs).
-   Fraunces carries a SOFT axis — the source of the rounded, friendly
-   terminals used for headings. Nunito Sans is a humanist sans with tall
-   x-height and open apertures, chosen for long, low-strain reading. */
-@font-face {
-  font-family: 'Fraunces';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('./assets/fonts/fraunces-latin-soft-normal.woff2') format('woff2-variations');
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face {
-  font-family: 'Fraunces';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('./assets/fonts/fraunces-latin-ext-soft-normal.woff2') format('woff2-variations');
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-@font-face {
-  font-family: 'Nunito Sans';
-  font-style: normal;
-  font-weight: 200 1000;
-  font-display: swap;
-  src: url('./assets/fonts/nunito-sans-latin-wght-normal.woff2') format('woff2-variations');
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face {
-  font-family: 'Nunito Sans';
-  font-style: normal;
-  font-weight: 200 1000;
-  font-display: swap;
-  src: url('./assets/fonts/nunito-sans-latin-ext-wght-normal.woff2') format('woff2-variations');
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
+/* ======================================================================
+   Woolgaze — Mint (primary) / Orange (secondary) / Olive (neutral) /
+   Green (success), from Radix UI Colors. Tokens themselves live in
+   tokens.css (see design-system.md); this block adapts them to the
+   shadcn-convention variable names the components already use, so no
+   component markup needs to change — only what each variable resolves
+   to. Light/dark auto-switches with the device.
 
-/* shadcn/ui token system — five cozy themes.
-   Every theme keeps text ≥4.5:1 on its surfaces (WCAG AA). */
+   Buttons and banners share one formula: a family's step-4 as the fill,
+   step-12 as the text — verified ≥9:1 in every family (design-system.md
+   §1.6), so "tint" and "solid" collapse into the same pair here. Two
+   families (Orange, Yellow) and one hair's-breadth case (Green) fail
+   AA at step 11 for standalone text and substitute step 12 instead —
+   also documented in §1.6, not re-derived here. */
 
 :root {
-  --radius: 0.75rem;
   --font-scale: 1;
-  --font-display: 'Fraunces', Georgia, 'Iowan Old Style', serif;
-  --font-body: 'Nunito Sans', ui-rounded, 'Segoe UI', system-ui, sans-serif;
 
-  /* Hearth (clay & wool — default). Ten-step primary/secondary/neutral
-     scales tuned for this app: clay-500 as primary, sage as the
-     supporting accent, undyed-wool neutrals for surface and text. */
-  --background: #F6F0E4;
-  --foreground: #3B2F26;
-  --card: #FBF8F3;
-  --card-foreground: #3B2F26;
-  --popover: #FBF8F3;
-  --popover-foreground: #3B2F26;
-  --primary: #B15E3F;
-  --primary-foreground: #FFFFFF;
-  --secondary: #EDE3D3;
-  --secondary-foreground: #3B2F26;
-  --muted: #EDE3D3;
-  --muted-foreground: #6B5C4D;
-  --accent: #EDE3D3;
-  --accent-foreground: #3B2F26;
-  --destructive: #C4432B;
-  --destructive-foreground: #FFFFFF;
-  --destructive-tint: #FBEBE7;
-  --destructive-tint-foreground: #8F2F1D;
-  --warning: #D9A94E;
-  --warning-foreground: #3B2F26;
-  --warning-tint: #FBF3E1;
-  --warning-tint-foreground: #8A6318;
-  --info: #4A7C93;
-  --info-foreground: #FFFFFF;
-  --info-tint: #EAF1F5;
-  --info-tint-foreground: #2C4F5E;
-  --success: #4F7A3D;
-  --success-foreground: #FFFFFF;
-  --success-tint: #EDF3E7;
-  --success-tint-foreground: #325027;
-  --border: #C2AF95;
-  --input: #C2AF95;
-  --ring: #954A30;
-  --highlight: #F5E0B0;
-  --done-overlay: rgba(59, 47, 38, 0.55);
-  /* Primary as *text* on a page/card background. Identical to --primary
-     in every theme whose primary is dark enough to read; themes with a
-     light primary override it with a deeper tone. */
-  --link: var(--primary);
-  color-scheme: light;
-}
+  /* ---- Neutral (Olive) ---- */
+  --background: var(--olive-2);
+  --foreground: var(--olive-12);
+  --card: var(--olive-1);
+  --card-foreground: var(--olive-12);
+  --popover: var(--olive-1);
+  --popover-foreground: var(--olive-12);
+  --secondary: var(--olive-3);
+  --secondary-foreground: var(--olive-12);
+  --muted: var(--olive-3);
+  --muted-foreground: var(--olive-11);
+  --accent: var(--olive-3);
+  --accent-foreground: var(--olive-12);
+  --border: var(--olive-7);
+  --input: var(--olive-7);
 
-/* Clay-500 reads fine as a button fill (4.6:1 with white) but falls just
-   under 4.5:1 as small text on this theme's own background/card, so link
-   text goes one step deeper. Scoped to "no data-theme set" specifically —
-   :root alone would leak into every other theme's --link, which already
-   resolves correctly through var(--primary). */
-:root:not([data-theme]) {
-  --link: #783A26;
-}
+  /* ---- Primary (Mint) ---- */
+  --primary: var(--primary-bg);
+  --primary-foreground: var(--primary-fg);
+  /* mint-9 (the usual "solid" ring step) is a pale wash — 1.36:1 against
+     this background, nowhere near the 3:1 a focus ring needs. mint-11
+     clears 5.17:1 instead. */
+  --ring: var(--mint-11);
+  --link: var(--primary-text);
+  --highlight: var(--primary-bg);
 
-[data-theme="meadow"] {
-  --background: #edf1e4;
-  --foreground: #26331f;
-  --card: #f9fbf3;
-  --card-foreground: #26331f;
-  --popover: #f9fbf3;
-  --popover-foreground: #26331f;
-  --primary: #46603a;
-  --primary-foreground: #ffffff;
-  --secondary: #e2e9d4;
-  --secondary-foreground: #26331f;
-  --muted: #e2e9d4;
-  --muted-foreground: #48583e;
-  --accent: #e2e9d4;
-  --accent-foreground: #26331f;
-  /* Pinned explicitly so swapping Hearth's palette can't change these by
-     falling through to :root — every other token above is already set
-     per-theme, but destructive previously relied on that fallback. */
-  --destructive: #9c3535;
-  --destructive-foreground: #ffffff;
-  --destructive-tint: #FBEBE7;
-  --destructive-tint-foreground: #8F2F1D;
-  --warning: #D9A94E;
-  --warning-foreground: #26331f;
-  --warning-tint: #FBF3E1;
-  --warning-tint-foreground: #8A6318;
-  --info: #4A7C93;
-  --info-foreground: #FFFFFF;
-  --info-tint: #EAF1F5;
-  --info-tint-foreground: #2C4F5E;
-  --success: #4F7A3D;
-  --success-foreground: #FFFFFF;
-  --success-tint: #EDF3E7;
-  --success-tint-foreground: #325027;
-  --border: #b3c19e;
-  --input: #b3c19e;
-  --ring: #37502c;
-  --highlight: #f5efc9;
-  --done-overlay: rgba(38, 51, 31, 0.55);
-}
+  /* ---- Secondary brand accent (Orange) — distinct from shadcn's generic
+     --secondary above, which stays neutral for surfaces/hover states.
+     Used where Orange should actually appear (e.g. the Button "accent"
+     variant), not for every "secondary"-named surface. ---- */
+  --secondary-accent: var(--secondary-bg);
+  --secondary-accent-foreground: var(--secondary-fg);
 
-[data-theme="lavender"] {
-  --background: #efecf5;
-  --foreground: #322b40;
-  --card: #faf8fd;
-  --card-foreground: #322b40;
-  --popover: #faf8fd;
-  --popover-foreground: #322b40;
-  --primary: #5b4880;
-  --primary-foreground: #ffffff;
-  --secondary: #e4dfef;
-  --secondary-foreground: #322b40;
-  --muted: #e4dfef;
-  --muted-foreground: #574d6d;
-  --accent: #e4dfef;
-  --accent-foreground: #322b40;
-  --destructive: #9c3535;
-  --destructive-foreground: #ffffff;
-  --destructive-tint: #FBEBE7;
-  --destructive-tint-foreground: #8F2F1D;
-  --warning: #D9A94E;
-  --warning-foreground: #322b40;
-  --warning-tint: #FBF3E1;
-  --warning-tint-foreground: #8A6318;
-  --info: #4A7C93;
-  --info-foreground: #FFFFFF;
-  --info-tint: #EAF1F5;
-  --info-tint-foreground: #2C4F5E;
-  --success: #4F7A3D;
-  --success-foreground: #FFFFFF;
-  --success-tint: #EDF3E7;
-  --success-tint-foreground: #325027;
-  --border: #b8aed0;
-  --input: #b8aed0;
-  --ring: #4a3a6b;
-  --highlight: #f3e7d8;
-  --done-overlay: rgba(50, 43, 64, 0.55);
-}
+  /* ---- Status: error / warning / info / success ---- */
+  --destructive: var(--error-bg);
+  --destructive-foreground: var(--error-fg);
+  --destructive-tint: var(--error-bg);
+  --destructive-tint-foreground: var(--error-fg);
+  --warning: var(--warning-bg);
+  --warning-foreground: var(--warning-fg);
+  --warning-tint: var(--warning-bg);
+  --warning-tint-foreground: var(--warning-fg);
+  --info: var(--info-bg);
+  --info-foreground: var(--info-fg);
+  --info-tint: var(--info-bg);
+  --info-tint-foreground: var(--info-fg);
+  --success: var(--success-bg);
+  --success-foreground: var(--success-fg);
+  --success-tint: var(--success-bg);
+  --success-tint-foreground: var(--success-fg);
 
-[data-theme="orchid"] {
-  /* User palette: #EFD9CE blush · #CEA2AC dusty rose · #A675A1 orchid ·
-     #8F3985 plum · #25283D ink. Plum carries white text at 6.8:1 and
-     delineates itself at 5:1 on blush, so it works as the primary fill
-     with no adjustment. Orchid is reserved for tints and chart colours —
-     it is too light to carry white text (3.7:1) or to read as link text. */
-  --background: #EFD9CE;
-  --foreground: #25283D;
-  --card: #FAEDE7;
-  --card-foreground: #25283D;
-  --popover: #FAEDE7;
-  --popover-foreground: #25283D;
-  --primary: #8F3985;
-  --primary-foreground: #FFFFFF;
-  --secondary: #E9D3D8;
-  --secondary-foreground: #25283D;
-  --muted: #E9D3D8;
-  --muted-foreground: #4C4F6B;
-  --accent: #EFDCE9;
-  --accent-foreground: #25283D;
-  --destructive: #9C3535;
-  --destructive-foreground: #FFFFFF;
-  --destructive-tint: #FBEBE7;
-  --destructive-tint-foreground: #8F2F1D;
-  --warning: #D9A94E;
-  --warning-foreground: #25283D;
-  --warning-tint: #FBF3E1;
-  --warning-tint-foreground: #8A6318;
-  --info: #4A7C93;
-  --info-foreground: #FFFFFF;
-  --info-tint: #EAF1F5;
-  --info-tint-foreground: #2C4F5E;
-  --success: #4F7A3D;
-  --success-foreground: #FFFFFF;
-  --success-tint: #EDF3E7;
-  --success-tint-foreground: #325027;
-  --border: #946C7C;
-  --input: #946C7C;
-  --ring: #8F3985;
-  --highlight: #CEA2AC;
-  --done-overlay: rgba(37, 40, 61, 0.55);
-}
-
-[data-theme="night"] {
-  --background: #211e1a;
-  --foreground: #f1e9dc;
-  --card: #2d2822;
-  --card-foreground: #f1e9dc;
-  --popover: #2d2822;
-  --popover-foreground: #f1e9dc;
-  --primary: #e0a967;
-  --primary-foreground: #211e1a;
-  --secondary: #3a332b;
-  --secondary-foreground: #f1e9dc;
-  --muted: #3a332b;
-  --muted-foreground: #c5b8a3;
-  --accent: #3a332b;
-  --accent-foreground: #f1e9dc;
-  --destructive: #e08585;
-  --destructive-foreground: #211e1a;
-  /* Dark theme: semantic colors invert to a dark tinted wash with a
-     light, saturated foreground, instead of light-tint-on-dark-text. */
-  --destructive-tint: #402420;
-  --destructive-tint-foreground: #e08585;
-  --warning: #e8bd85;
-  --warning-foreground: #211e1a;
-  --warning-tint: #3d3020;
-  --warning-tint-foreground: #e8bd85;
-  --info: #8fb8d9;
-  --info-foreground: #211e1a;
-  --info-tint: #1f2d38;
-  --info-tint-foreground: #a8cbe3;
-  --success: #9dc98a;
-  --success-foreground: #211e1a;
-  --success-tint: #24301f;
-  --success-tint-foreground: #b9dba8;
-  --border: #5d5344;
-  --input: #5d5344;
-  --ring: #e8bd85;
-  --highlight: #4a3f2c;
-  --done-overlay: rgba(241, 233, 220, 0.45);
-  color-scheme: dark;
-}
-
-[data-theme="contrast"] {
-  --background: #ffffff;
-  --foreground: #000000;
-  --card: #ffffff;
-  --card-foreground: #000000;
-  --popover: #ffffff;
-  --popover-foreground: #000000;
-  --primary: #000000;
-  --primary-foreground: #ffffff;
-  --secondary: #f2f2f2;
-  --secondary-foreground: #000000;
-  --muted: #f2f2f2;
-  --muted-foreground: #1f1f1f;
-  --accent: #f2f2f2;
-  --accent-foreground: #000000;
-  --destructive: #a50000;
-  --destructive-foreground: #ffffff;
-  /* High contrast leans on black text at near-max ratios rather than a
-     colored foreground, so semantics never rest on hue perception alone. */
-  --destructive-tint: #FFEDEA;
-  --destructive-tint-foreground: #000000;
-  --warning: #7A5900;
-  --warning-foreground: #ffffff;
-  --warning-tint: #FFF6DC;
-  --warning-tint-foreground: #000000;
-  --info: #004C8C;
-  --info-foreground: #ffffff;
-  --info-tint: #E8F4FF;
-  --info-tint-foreground: #000000;
-  --success: #146C2E;
-  --success-foreground: #ffffff;
-  --success-tint: #E6F7E6;
-  --success-tint-foreground: #000000;
-  --border: #000000;
-  --input: #000000;
-  --ring: #0000cc;
-  --highlight: #ffee99;
-  --done-overlay: rgba(0, 0, 0, 0.6);
+  --done-overlay: rgba(29, 33, 28, 0.55);
 }
 
 @theme inline {
@@ -315,6 +84,8 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-accent: var(--secondary-accent);
+  --color-secondary-accent-foreground: var(--secondary-accent-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
@@ -340,10 +111,10 @@
   --color-ring: var(--ring);
   --color-highlight: var(--highlight);
   --color-link: var(--link);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: var(--ws-radius-sm);
+  --radius-md: var(--ws-radius-md);
+  --radius-lg: var(--ws-radius-lg);
+  --radius-xl: var(--ws-radius-xl);
 }
 
 @layer base {
@@ -358,54 +129,56 @@
     background: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
-    font-size: 1.0625rem;
-    line-height: 1.6;
-    letter-spacing: 0.005em;
+    font-size: var(--text-body-size);
+    font-weight: var(--text-body-weight);
+    line-height: var(--text-body-leading);
+    letter-spacing: var(--text-body-tracking);
     margin: 0;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
-  /* Hierarchy comes from family + size + weight together, not size alone:
-     headings switch to the display serif with its SOFT axis raised, body
-     copy stays in the sans. Sizes step by roughly a major third. */
+  /* Headlines: Fraunces semibold. Left at its default SOFT axis (0) —
+     raising it rounds off the sharp, high-contrast serifs that make
+     Fraunces actually read as Fraunces; at SOFT 100 it was close enough
+     to the Georgia fallback to look like the font wasn't loading at all.
+     Body copy stays in Nunito Sans throughout. */
   h1, h2, h3,
   [data-slot="card-title"],
   [data-slot="dialog-title"] {
     font-family: var(--font-display);
-    font-variation-settings: 'SOFT' 100;
-    letter-spacing: -0.011em;
-    line-height: 1.2;
     text-wrap: balance;
   }
   h1 {
-    font-size: 1.9rem;
-    font-weight: 600;
-    letter-spacing: -0.018em;
+    font-size: var(--text-h1-size);
+    font-weight: var(--text-h1-weight);
+    line-height: var(--text-h1-leading);
+    letter-spacing: var(--text-h1-tracking);
   }
   h2 {
-    font-size: 1.45rem;
-    font-weight: 550;
+    font-size: var(--text-h2-size);
+    font-weight: var(--text-h2-weight);
+    line-height: var(--text-h2-leading);
+    letter-spacing: var(--text-h2-tracking);
   }
-  /* Card and dialog titles run small, where a serif needs a little more
-     weight to hold its colour against the body text beneath it. */
   h3,
   [data-slot="card-title"],
   [data-slot="dialog-title"] {
-    font-size: 1.12rem;
-    font-weight: 600;
+    font-size: var(--text-h3-size);
+    font-weight: var(--text-h3-weight);
+    line-height: var(--text-h3-leading);
+    letter-spacing: var(--text-h3-tracking);
   }
-  /* Supporting copy sits a clear step below its heading. */
   [data-slot="card-description"],
   [data-slot="dialog-description"] {
-    line-height: 1.5;
+    font-size: var(--text-body-sm-size);
+    line-height: var(--text-body-sm-leading);
   }
-  /* Buttons and labels: the sans, a little tighter and heavier so they
-     read as controls rather than prose. */
   [data-slot="button"],
   [data-slot="label"] {
     font-family: var(--font-body);
-    font-weight: 600;
-    letter-spacing: 0.004em;
+    font-size: var(--text-label-size);
+    font-weight: var(--text-label-weight);
+    letter-spacing: var(--text-label-tracking);
   }
 
   :focus-visible {
@@ -421,54 +194,36 @@
 }
 
 /* ======================================================================
-   Platform-adaptive skins. shadcn components expose data-slot hooks, so
-   each skin restyles the same primitives without touching markup.
-   These rules are unlayered, so they win over Tailwind utilities.
+   iOS-shaped surfaces — capsule buttons, bottom-sheet dialogs, floating
+   tab bar, grouped-inset fields. Two surface finishes share this same
+   shape language: the default is Flat (opaque, no blur); add
+   [data-surface="glass"] on <html> to swap every opaque surface to a
+   translucent, blurred Liquid Glass one instead, same shapes and radii
+   throughout. Unlayered, so these win over Tailwind utilities.
    ====================================================================== */
 
-/* ---------- iOS 26 · Liquid Glass ---------- */
-
-[data-platform="ios"] {
-  --radius: 1.15rem;
-}
-
-/* Large-title navigation header */
-[data-platform="ios"] header {
+header {
   text-align: left;
   padding-top: max(1rem, env(safe-area-inset-top, 0px));
 }
-[data-platform="ios"] header h1 {
-  font-size: 2rem;
-  letter-spacing: -0.02em;
+header h1 {
+  font-size: var(--text-h1-size);
 }
 
-/* Translucent glass cards */
-[data-platform="ios"] [data-slot="card"] {
-  background: color-mix(in srgb, var(--card) 78%, transparent);
-  -webkit-backdrop-filter: blur(16px) saturate(1.6);
-  backdrop-filter: blur(16px) saturate(1.6);
-  border-color: color-mix(in srgb, var(--border) 45%, transparent);
-  border-radius: 1.4rem;
-  box-shadow: 0 4px 24px rgb(0 0 0 / 0.06);
+[data-slot="button"] {
+  border-radius: var(--ws-radius-full);
 }
 
-/* Capsule buttons */
-[data-platform="ios"] [data-slot="button"] {
-  border-radius: 999px;
-  font-weight: 600;
-}
-
-/* Grouped-inset form fields: filled, borderless */
-[data-platform="ios"] [data-slot="input"],
-[data-platform="ios"] [data-slot="textarea"],
-[data-platform="ios"] [data-slot="select-trigger"] {
+/* Grouped-inset form fields: filled, borderless — same in both finishes. */
+[data-slot="input"],
+[data-slot="textarea"],
+[data-slot="select-trigger"] {
   background: color-mix(in srgb, var(--secondary) 85%, var(--card));
   border-color: transparent;
-  border-radius: 0.85rem;
+  border-radius: var(--radius-md);
 }
 
-/* Dialogs become bottom sheets with a grabber */
-[data-platform="ios"] [data-slot="dialog-content"] {
+[data-slot="dialog-content"] {
   top: auto;
   bottom: 0;
   left: 0;
@@ -477,14 +232,11 @@
   width: 100%;
   max-width: 100%;
   max-height: 88dvh;
-  border-radius: 1.75rem 1.75rem 0 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   border-bottom: 0;
-  background: color-mix(in srgb, var(--popover) 90%, transparent);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8);
-  backdrop-filter: blur(24px) saturate(1.8);
   padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
 }
-[data-platform="ios"] [data-slot="dialog-content"]::before {
+[data-slot="dialog-content"]::before {
   content: "";
   position: absolute;
   top: 0.45rem;
@@ -492,11 +244,11 @@
   translate: -50% 0;
   width: 2.25rem;
   height: 0.3rem;
-  border-radius: 999px;
+  border-radius: var(--ws-radius-full);
   background: color-mix(in srgb, var(--foreground) 25%, transparent);
 }
 @media (min-width: 640px) {
-  [data-platform="ios"] [data-slot="dialog-content"] {
+  [data-slot="dialog-content"] {
     --dlg-translate: -50% 0;
     left: 50%;
     right: auto;
@@ -504,150 +256,117 @@
   }
 }
 
-[data-platform="ios"] [data-slot="select-content"] {
-  background: color-mix(in srgb, var(--popover) 85%, transparent);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  backdrop-filter: blur(20px) saturate(1.8);
-  border-radius: 1rem;
+[data-slot="select-content"] {
+  border-radius: var(--radius-lg);
 }
 
-/* Floating glass capsule tab bar */
-[data-platform="ios"] .tab-bar {
+.tab-bar {
   left: 0.9rem;
   right: 0.9rem;
   bottom: calc(0.7rem + env(safe-area-inset-bottom, 0px));
-  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--card) 72%, transparent);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  backdrop-filter: blur(20px) saturate(1.8);
-  box-shadow: 0 10px 32px rgb(0 0 0 / 0.14);
+  border-radius: var(--ws-radius-full);
   padding: 0.15rem 0.25rem;
   max-width: 26rem;
   margin: 0 auto;
 }
-[data-platform="ios"] .tab-bar button {
+.tab-bar button {
   border-top: 0;
   margin-top: 0;
-  border-radius: 999px;
+  border-radius: var(--ws-radius-full);
 }
-[data-platform="ios"] .tab-bar button[aria-current] {
+.tab-bar button[aria-current] {
   color: var(--link);
 }
-[data-platform="ios"] .app-shell {
+.app-shell {
   padding-bottom: 7.5rem;
 }
 
-/* ---------- Android · Material 3 ---------- */
-
-[data-platform="material"] {
-  --radius: 1rem;
-}
-
-[data-platform="material"] header h1 {
-  font-weight: 550;
-  letter-spacing: -0.005em;
-}
-
-/* Tonal elevated cards — surface tint instead of borders */
-[data-platform="material"] [data-slot="card"] {
-  background: color-mix(in srgb, var(--primary) 6%, var(--card));
-  border-color: transparent;
-  border-radius: 1rem;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 1px 3px 1px rgb(0 0 0 / 0.08);
-}
-[data-theme="contrast"][data-platform="material"] [data-slot="card"] {
-  border-color: var(--border);
-}
-
-/* Full-pill buttons, M3 label style */
-[data-platform="material"] [data-slot="button"] {
-  border-radius: 999px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-}
-
-/* Outlined text fields (4dp corners) */
-[data-platform="material"] [data-slot="input"],
-[data-platform="material"] [data-slot="textarea"],
-[data-platform="material"] [data-slot="select-trigger"] {
-  border-radius: 0.25rem;
-}
-
-/* M3 dialogs: 28dp corners, tonal surface */
-[data-platform="material"] [data-slot="dialog-content"] {
-  border-radius: 1.75rem;
-  border-color: transparent;
-  background: color-mix(in srgb, var(--primary) 8%, var(--popover));
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.22);
-}
-
-/* M3 navigation bar: tonal surface, active-indicator pill behind icon */
-[data-platform="material"] .tab-bar {
-  background: color-mix(in srgb, var(--primary) 8%, var(--card));
-  border-top: 0;
-  box-shadow: 0 -1px 3px rgb(0 0 0 / 0.1);
-}
-[data-platform="material"] .tab-bar button {
-  border-top: 0;
-  margin-top: 0;
-  font-weight: 500;
-}
-[data-platform="material"] .tab-bar .tab-icon {
-  padding: 0.2rem 1rem;
-  border-radius: 999px;
-  transition: background-color 0.15s ease;
-}
-[data-platform="material"] .tab-bar button[aria-current] .tab-icon {
-  background: color-mix(in srgb, var(--primary) 24%, var(--background));
-}
-[data-theme="contrast"][data-platform="material"] .tab-bar button[aria-current] .tab-icon {
-  background: var(--highlight);
-}
-
-/* Glass and tints can't guarantee contrast in forced high-contrast mode —
-   fall back to opaque surfaces there. */
-[data-theme="contrast"][data-platform="ios"] [data-slot="card"],
-[data-theme="contrast"][data-platform="ios"] [data-slot="dialog-content"],
-[data-theme="contrast"][data-platform="ios"] [data-slot="select-content"],
-[data-theme="contrast"][data-platform="ios"] .tab-bar {
-  background: var(--card);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  border-color: var(--border);
-}
-[data-theme="contrast"][data-platform="ios"] [data-slot="input"],
-[data-theme="contrast"][data-platform="ios"] [data-slot="textarea"],
-[data-theme="contrast"][data-platform="ios"] [data-slot="select-trigger"] {
-  border-color: var(--input);
-}
-
-/* ---------- Floating counter bar ---------- */
-/* Sits clear of the tab bar, whose height and inset differ per skin. */
-:root { --counter-bottom: calc(3.9rem + env(safe-area-inset-bottom, 0px)); }
-[data-platform="ios"] { --counter-bottom: calc(5.1rem + env(safe-area-inset-bottom, 0px)); }
-[data-platform="material"] { --counter-bottom: calc(4.1rem + env(safe-area-inset-bottom, 0px)); }
-
+:root { --counter-bottom: calc(5.1rem + env(safe-area-inset-bottom, 0px)); }
 .counter-bar {
   bottom: var(--counter-bottom);
   max-width: 42rem;
   margin: 0 auto;
+  border-radius: var(--radius-lg);
 }
-[data-platform="ios"] .counter-bar {
+
+/* ---------- Flat finish (default): same shapes, opaque surfaces, no blur ---------- */
+[data-slot="card"] {
+  background: var(--card);
+  border-color: var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
+}
+[data-slot="dialog-content"] {
+  background: var(--popover);
+  box-shadow: 0 -4px 24px rgb(0 0 0 / 0.1);
+}
+[data-slot="select-content"] {
+  background: var(--popover);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+}
+.tab-bar {
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 0.08);
+}
+.counter-bar {
+  background: var(--card);
+  border-color: var(--border);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 0.1);
+}
+
+/* ---------- Liquid Glass finish: [data-surface="glass"] on <html> ---------- */
+[data-surface="glass"] [data-slot="card"] {
+  background: color-mix(in srgb, var(--card) 78%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  backdrop-filter: blur(16px) saturate(1.6);
+  border-color: color-mix(in srgb, var(--border) 45%, transparent);
+  box-shadow: 0 4px 24px rgb(0 0 0 / 0.06);
+}
+[data-surface="glass"] [data-slot="dialog-content"] {
+  background: color-mix(in srgb, var(--popover) 90%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+}
+[data-surface="glass"] [data-slot="select-content"] {
+  background: color-mix(in srgb, var(--popover) 85%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  border-color: transparent;
+}
+[data-surface="glass"] .tab-bar {
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  background: color-mix(in srgb, var(--card) 72%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  box-shadow: 0 10px 32px rgb(0 0 0 / 0.14);
+}
+[data-surface="glass"] .counter-bar {
   background: color-mix(in srgb, var(--card) 82%, transparent);
   -webkit-backdrop-filter: blur(20px) saturate(1.8);
   backdrop-filter: blur(20px) saturate(1.8);
   border-color: color-mix(in srgb, var(--border) 50%, transparent);
-  border-radius: 1.5rem;
 }
-[data-platform="material"] .counter-bar {
-  background: color-mix(in srgb, var(--primary) 8%, var(--card));
-  border-color: transparent;
-  box-shadow: 0 3px 6px rgb(0 0 0 / .16), 0 8px 24px rgb(0 0 0 / .18);
-}
-[data-theme="contrast"] .counter-bar {
-  background: var(--card);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  border-color: var(--border);
+
+/* Glass can't guarantee contrast under OS-level forced-colors (Windows
+   High Contrast) — fall back to opaque, bordered surfaces there,
+   regardless of which finish is active. */
+@media (forced-colors: active) {
+  [data-slot="card"],
+  [data-slot="dialog-content"],
+  [data-slot="select-content"],
+  .tab-bar,
+  .counter-bar {
+    background: Canvas;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+  [data-slot="input"],
+  [data-slot="textarea"],
+  [data-slot="select-trigger"] {
+    border: 1px solid CanvasText;
+  }
 }

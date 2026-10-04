@@ -91,7 +91,7 @@ export default function ChartReader({ id, navigate }) {
         <Button variant="outline" onClick={() => moveRow(1)}>
           <ChevronUp aria-hidden="true" /> Next row
         </Button>
-        <Button variant="secondary" onClick={markRowDone}>
+        <Button variant="accent" onClick={markRowDone}>
           <Check aria-hidden="true" /> Mark row complete
         </Button>
       </div>

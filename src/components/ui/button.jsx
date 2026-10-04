@@ -12,6 +12,9 @@ const buttonVariants = cva(
         destructive: 'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90',
         outline: 'border bg-card shadow-xs hover:bg-accent hover:text-accent-foreground',
         secondary: 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
+        // The Orange "secondary brand" accent — distinct from the plain
+        // `secondary` variant above, which is a neutral Olive surface.
+        accent: 'bg-secondary-accent text-secondary-accent-foreground shadow-xs hover:bg-secondary-accent/90',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-link underline-offset-4 underline',
       },

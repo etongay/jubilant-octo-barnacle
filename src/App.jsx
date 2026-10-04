@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { Basket, Grid2x2, Volleyball, BookOpen, Settings } from './lib/icons.jsx';
 import { settings } from './lib/db.js';
 import { registerAnnouncer } from './lib/announce.js';
-import { applyPlatform } from './lib/platform.js';
 import ProjectsView from './features/ProjectsView.jsx';
 import ProjectDetail from './features/ProjectDetail.jsx';
 import ChartsView from './features/ChartsView.jsx';
@@ -36,14 +35,6 @@ const SUBTITLES = {
   more: 'Make it yours',
 };
 
-export function applyTheme(id) {
-  if (id === 'hearth') document.documentElement.removeAttribute('data-theme');
-  else document.documentElement.setAttribute('data-theme', id);
-  settings.set('theme', id);
-  const bg = getComputedStyle(document.body).backgroundColor;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg);
-}
-
 export default function App() {
   const [route, setRoute] = useState({ view: 'projects', id: null });
   const announcerRef = useRef(null);
@@ -51,11 +42,18 @@ export default function App() {
 
   useEffect(() => {
     registerAnnouncer(announcerRef.current);
-    const saved = settings.get('theme');
-    const preferDark = matchMedia('(prefers-color-scheme: dark)').matches;
-    applyTheme(saved || (preferDark ? 'night' : 'hearth'));
-    applyPlatform(settings.get('platform', 'auto'));
     document.documentElement.style.setProperty('--font-scale', String(settings.get('fontScale', 1)));
+
+    // Liquid Glass tracks the device's own light/dark setting (see app.css);
+    // keep the status-bar colour following it, including a live OS toggle.
+    const syncThemeColor = () => {
+      const bg = getComputedStyle(document.body).backgroundColor;
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg);
+    };
+    syncThemeColor();
+    const mq = matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener('change', syncThemeColor);
+    return () => mq.removeEventListener('change', syncThemeColor);
   }, []);
 
   const navigate = (view, id = null) => {
@@ -79,7 +77,7 @@ export default function App() {
 
       <header className="px-4 pt-4 pb-1 text-center">
         <h1 className="text-2xl font-bold">
-          <span aria-hidden="true">🧶</span> Hearth &amp; Hook
+          <span aria-hidden="true">🧶</span> Woolgaze
         </h1>
         <p className="text-sm text-muted-foreground">{SUBTITLES[route.view] || ''}</p>
       </header>

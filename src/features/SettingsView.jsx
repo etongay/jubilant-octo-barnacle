@@ -2,27 +2,14 @@ import { useState } from 'react';
 import { db, settings } from '@/lib/db.js';
 import { announce } from '@/lib/announce.js';
 import { testRavelry } from '@/lib/ravelry.js';
-import { applyTheme } from '@/App.jsx';
-import { applyPlatform, detectPlatform } from '@/lib/platform.js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
-const THEMES = [
-  { id: 'hearth', label: 'Hearth', dot: '#B15E3F' },
-  { id: 'meadow', label: 'Meadow', dot: '#edf1e4' },
-  { id: 'lavender', label: 'Lavender', dot: '#efecf5' },
-  { id: 'orchid', label: 'Orchid', dot: '#8F3985' },
-  { id: 'night', label: 'Night', dot: '#211e1a' },
-  { id: 'contrast', label: 'High contrast', dot: '#ffffff' },
-];
-
 export default function SettingsView({ navigate }) {
-  const [theme, setTheme] = useState(settings.get('theme', 'hearth') || 'hearth');
   const [fontScale, setFontScale] = useState(String(settings.get('fontScale', 1)));
   const [ravUser, setRavUser] = useState(settings.get('ravUser', ''));
   const [ravPass, setRavPass] = useState(settings.get('ravPass', ''));
@@ -30,66 +17,21 @@ export default function SettingsView({ navigate }) {
   const [ravChecking, setRavChecking] = useState(false);
   const [ravResult, setRavResult] = useState(null); // { variant: 'success'|'error', message }
   const [importError, setImportError] = useState('');
-  const [platform, setPlatform] = useState(settings.get('platform', 'auto') || 'auto');
-
-  const PLATFORM_LABELS = {
-    cozy: 'Cozy classic', ios: 'iOS glass', material: 'Material (Android)',
-  };
 
   return (
     <section aria-labelledby="settings-heading" className="grid gap-3">
       <h2 id="settings-heading" className="text-xl font-bold">Settings</h2>
 
       <Card>
-        <CardHeader><CardTitle>Theme</CardTitle></CardHeader>
-        <CardContent className="grid gap-4">
-          <RadioGroup
-            value={theme}
-            onValueChange={(id) => {
-              setTheme(id);
-              applyTheme(id);
-              announce(THEMES.find(t => t.id === id).label + ' theme applied');
-            }}
-            className="flex flex-wrap gap-2"
-          >
-            {THEMES.map(t => (
-              <Label
-                key={t.id}
-                htmlFor={'theme-' + t.id}
-                data-theme={t.id}
-                className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border bg-card px-3.5 py-2 font-normal"
-                style={{ background: 'var(--card)', color: 'var(--card-foreground)', borderColor: 'var(--border)' }}
-              >
-                <RadioGroupItem id={'theme-' + t.id} value={t.id} />
-                {t.label}
-              </Label>
-            ))}
-          </RadioGroup>
-          <div className="grid gap-1.5">
-            <Label htmlFor="app-style">App style</Label>
-            <Select value={platform} onValueChange={(v) => {
-              setPlatform(v);
-              const resolved = applyPlatform(v);
-              announce(PLATFORM_LABELS[resolved] + ' style applied');
-            }}>
-              <SelectTrigger id="app-style" className="max-w-64"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="auto">Automatic ({PLATFORM_LABELS[detectPlatform()]})</SelectItem>
-                <SelectItem value="cozy">Cozy classic</SelectItem>
-                <SelectItem value="ios">iOS glass</SelectItem>
-                <SelectItem value="material">Material (Android)</SelectItem>
-              </SelectContent>
-            </Select>
-            <p className="text-sm text-muted-foreground">
-              Automatic matches your phone: liquid-glass on iPhone, Material on Android.
-            </p>
-          </div>
+        <CardHeader><CardTitle>Text size</CardTitle></CardHeader>
+        <CardContent>
           <div className="grid gap-1.5">
             <Label htmlFor="font-scale">Text size</Label>
             <Select value={fontScale} onValueChange={(v) => {
               setFontScale(v);
               settings.set('fontScale', Number(v));
               document.documentElement.style.setProperty('--font-scale', v);
+              announce('Text size set to ' + ({ '1': 'regular', '1.15': 'large', '1.3': 'extra large' }[v] || v));
             }}>
               <SelectTrigger id="font-scale" className="max-w-48"><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -177,7 +119,7 @@ export default function SettingsView({ navigate }) {
             const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'hearth-and-hook-backup.json';
+            a.download = 'woolgaze-backup.json';
             a.click();
             URL.revokeObjectURL(a.href);
             announce('Backup downloaded');
