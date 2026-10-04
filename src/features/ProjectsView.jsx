@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { CounterBar } from '@/components/counter-bar.jsx';
-import { StatusBadge, TagList } from '@/components/badges.jsx';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -28,6 +27,23 @@ export const STATUS_LABELS = {
   planned: 'Planned', 'in-progress': 'In progress', finished: 'Finished',
   hibernating: 'Hibernating', frogged: 'Frogged',
 };
+
+// No real photo-upload feature exists yet, so a card's "preview image" is a
+// generated placeholder — a two-tone gradient hashed from the project's own
+// id, so it's stable across renders without being stored anywhere. Title and
+// progress live in a solid caption area below the image rather than
+// overlaid on it: an arbitrary generated gradient has no predictable
+// luminance, so there's no fixed scrim opacity that could guarantee
+// WCAG-contrast text sitting on top of every hue this produces.
+function hashHue(seed) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return h % 360;
+}
+function coverStyle(project) {
+  const hue = hashHue(project.id || project.name || '');
+  return { background: `linear-gradient(135deg, hsl(${hue} 60% 72%), hsl(${(hue + 44) % 360} 65% 50%))` };
+}
 
 /** The counter a project is measured by — its rows, or failing that its first. */
 export function rowCounter(project) {
@@ -107,6 +123,9 @@ export default function ProjectsView({ navigate }) {
   };
 
   const shown = projects.filter(matches);
+  // Most-recently-updated in-progress projects — a "continue making" rail,
+  // capped at 3 regardless of how many are actually in progress.
+  const inProgress = projects.filter(p => p.status === 'in-progress').slice(0, 3);
 
   const barVisible = !!active && !!activeCounter && !dismissed;
 
@@ -151,6 +170,63 @@ export default function ProjectsView({ navigate }) {
         </Button>
       )}
 
+      {inProgress.length > 0 && (
+        <div className="mt-4">
+          <h3 className="mb-2">In progress</h3>
+          {/* Left edge stays flush with the rest of the app's content margin
+              (no left bleed); -mr-4/pr-4 only extend the right edge past the
+              content column to the viewport edge, so an unscrolled card gets
+              visibly clipped there — the cue that there's more to scroll. */}
+          <div
+            role="region"
+            aria-label="In progress projects"
+            tabIndex={0}
+            className="-mr-4 flex snap-x snap-mandatory gap-3 overflow-x-auto pr-4 pb-1"
+          >
+            {inProgress.map(p => {
+              const counter = rowCounter(p);
+              const pct = counter?.target
+                ? Math.min(100, Math.round((counter.value / counter.target) * 100)) : null;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => navigate('project-detail', p.id)}
+                  className="w-[72%] max-w-72 shrink-0 snap-start overflow-hidden rounded-xl border bg-card text-left"
+                >
+                  <div aria-hidden="true" className="aspect-[4/3] w-full" style={coverStyle(p)} />
+                  <div className="p-3">
+                    <p className="truncate font-bold">{p.name}</p>
+                    {pct !== null ? (
+                      <>
+                        {/* orange-11, not the app's --secondary-accent(-foreground)
+                            tokens: step 4 is too pale and step 12 is a dark,
+                            desaturated "ink" shade made for text, not a fill —
+                            neither reads as orange. Step 11 is vivid and still
+                            clears 3:1 against the track in both modes. */}
+                        <Progress
+                          value={pct}
+                          aria-label={`${p.name} progress`}
+                          className="mt-2"
+                          indicatorClassName="bg-[var(--orange-11)]"
+                        />
+                        <p className="mt-1 text-sm text-muted-foreground">{pct}%</p>
+                      </>
+                    ) : (
+                      counter && (
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {counter.value} {counter.name.toLowerCase()}
+                        </p>
+                      )
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {projects.length > 0 && (
         <>
           <div className="mt-4 flex items-center gap-2">
@@ -193,43 +269,19 @@ export default function ProjectsView({ navigate }) {
               Nothing matches. Clear a filter to see more.
             </p>
           ) : (
-            <ul aria-label="Your projects" className="grid list-none gap-3 p-0">
-              {shown.map(p => {
-                const counter = rowCounter(p);
-                const pct = counter?.target
-                  ? Math.min(100, Math.round((counter.value / counter.target) * 100)) : null;
-                return (
-                  <li key={p.id}>
-                    <Card className="py-0">
-                      <CardContent className="px-4 py-3.5">
-                        <button
-                          type="button"
-                          onClick={() => navigate('project-detail', p.id)}
-                          className="w-full rounded-lg text-left"
-                        >
-                          <span className="flex items-center justify-between gap-2">
-                            <span className="font-bold">{p.name}</span>
-                            <StatusBadge>{STATUS_LABELS[p.status]}</StatusBadge>
-                          </span>
-                          {counter && (
-                            <span className="mt-0.5 block text-sm text-muted-foreground">
-                              {counter.value}{counter.target ? ` of ${counter.target}` : ''}{' '}
-                              {counter.name.toLowerCase()}
-                            </span>
-                          )}
-                          {p.id === activeId && barVisible && (
-                            <span className="mt-0.5 block text-sm font-semibold text-link">
-                              On the hook
-                            </span>
-                          )}
-                        </button>
-                        {pct !== null && <Progress value={pct} aria-label="Progress" className="mt-2" />}
-                        <TagList tags={p.tags} className="mt-2" label={`Tags on ${p.name}`} />
-                      </CardContent>
-                    </Card>
-                  </li>
-                );
-              })}
+            <ul aria-label="Your projects" className="grid list-none grid-cols-2 gap-3 p-0">
+              {shown.map(p => (
+                <li key={p.id}>
+                  <button
+                    type="button"
+                    onClick={() => navigate('project-detail', p.id)}
+                    className="w-full overflow-hidden rounded-xl border bg-card text-left"
+                  >
+                    <div aria-hidden="true" className="aspect-square w-full" style={coverStyle(p)} />
+                    <p className="truncate p-2.5 font-bold">{p.name}</p>
+                  </button>
+                </li>
+              ))}
             </ul>
           )}
         </>
