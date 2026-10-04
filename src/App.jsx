@@ -76,9 +76,7 @@ export default function App() {
       </a>
 
       <header className="px-4 pt-4 pb-1 text-center">
-        <h1 className="text-2xl font-bold">
-          <span aria-hidden="true">🧶</span> Woolgaze
-        </h1>
+        <h1 className="text-2xl font-bold">Woolgaze</h1>
         <p className="text-sm text-muted-foreground">{SUBTITLES[route.view] || ''}</p>
       </header>
 

@@ -1,4 +1,4 @@
-# 🧶 Woolgaze
+# Woolgaze
 
 A cozy crochet companion for your phone. Track projects with stitch and row
 counters, manage your yarn stash by scanning ball-band barcodes, read mosaic
