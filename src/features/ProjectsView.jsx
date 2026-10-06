@@ -20,7 +20,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
 import { TagChips } from '@/components/tag-chips.jsx';
-import { Plus, Search, Filter, Repeat } from '@/lib/icons.jsx';
+import { Plus, Search, Filter, FilterX, Repeat } from '@/lib/icons.jsx';
 import ProjectDialog from './ProjectDialog.jsx';
 
 export const STATUS_LABELS = {
@@ -356,7 +356,7 @@ export default function ProjectsView({ navigate }) {
               variant="outline"
               onClick={() => { setStatusFilter(null); setTagFilter([]); announce('Filters cleared'); }}
             >
-              Clear all
+              <FilterX aria-hidden="true" /> Clear all
             </Button>
             <Button onClick={() => {
               setFilterOpen(false);
