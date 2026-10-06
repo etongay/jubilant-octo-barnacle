@@ -44,11 +44,14 @@ function DialogContent({ className, children, ...props }) {
 }
 
 function DialogHeader({ className, ...props }) {
-  return <div data-slot="dialog-header" className={cn('flex flex-col gap-1 text-left', className)} {...props} />;
+  // pr-9 keeps a long title clear of the absolutely-positioned close button.
+  return <div data-slot="dialog-header" className={cn('flex flex-col gap-1 pr-9 text-left', className)} {...props} />;
 }
 
 function DialogFooter({ className, ...props }) {
-  return <div data-slot="dialog-footer" className={cn('flex flex-row justify-end gap-2', className)} {...props} />;
+  // flex-wrap: two nowrap buttons at the largest text size outgrow a 320px
+  // phone, which would otherwise widen the whole sheet past the screen edge.
+  return <div data-slot="dialog-footer" className={cn('flex flex-row flex-wrap justify-end gap-2', className)} {...props} />;
 }
 
 function DialogTitle({ className, ...props }) {
