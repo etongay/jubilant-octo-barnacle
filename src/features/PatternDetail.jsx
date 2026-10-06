@@ -25,10 +25,7 @@ import {
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.jsx';
-import {
-  ChevronLeft, Settings, Pencil, Copy, FolderInput, Trash2, Folder,
-  FileText, LinkIcon, ExternalLink, Upload, BookOpen,
-} from '@/lib/icons.jsx';
+import { CaretLeft, Gear, PencilSimple, Copy, ArrowSquareIn, Trash, Folder, FileText, LinkIcon, ArrowSquareOut, UploadSimple, BookOpen } from '@/lib/icons.jsx';
 import { coverStyle } from './ProjectsView.jsx';
 
 // The Craft Yarn Council's four skill levels — what most published
@@ -243,7 +240,7 @@ export default function PatternDetail({ id, navigate }) {
           aria-label={editing ? 'Cancel editing' : 'Back to patterns'}
           onClick={() => (editing ? cancelEdit() : navigate('patterns'))}
         >
-          <ChevronLeft className="size-6" aria-hidden="true" />
+          <CaretLeft className="size-6" aria-hidden="true" />
         </button>
 
         {editing ? (
@@ -254,18 +251,18 @@ export default function PatternDetail({ id, navigate }) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button type="button" className="glass-control" aria-label="Pattern options">
-                <Settings className="size-5.5" aria-hidden="true" />
+                <Gear className="size-5.5" aria-hidden="true" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onSelect={startEdit}>Edit <Pencil aria-hidden="true" /></DropdownMenuItem>
+              <DropdownMenuItem onSelect={startEdit}>Edit <PencilSimple aria-hidden="true" /></DropdownMenuItem>
               <DropdownMenuItem onSelect={duplicate}>Duplicate <Copy aria-hidden="true" /></DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setMoveOpen(true)}>
-                Move to folder <FolderInput aria-hidden="true" />
+                Move to folder <ArrowSquareIn aria-hidden="true" />
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive" onSelect={() => setDeleteOpen(true)}>
-                Delete <Trash2 aria-hidden="true" />
+                Delete <Trash aria-hidden="true" />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -349,7 +346,7 @@ export default function PatternDetail({ id, navigate }) {
                     htmlFor="pd-file"
                     className="flex min-h-14 cursor-pointer items-center gap-3 rounded-[var(--radius-md)] border-2 border-dashed px-3 py-2 focus-within:outline-3 focus-within:outline-[var(--color-ring)]"
                   >
-                    <Upload className="size-5 shrink-0 text-link" aria-hidden="true" />
+                    <UploadSimple className="size-5 shrink-0 text-link" aria-hidden="true" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-semibold">
                         {draft.file?.name || pattern.fileName || 'Choose a PDF, image or text file'}
@@ -393,7 +390,7 @@ export default function PatternDetail({ id, navigate }) {
                 >
                   <LinkIcon className="size-4 shrink-0" aria-hidden="true" />
                   {pattern.url.replace(/^https?:\/\/(www\.)?/, '')}
-                  <ExternalLink className="size-4 shrink-0" aria-hidden="true" />
+                  <ArrowSquareOut className="size-4 shrink-0" aria-hidden="true" />
                   <span className="sr-only">(opens in a new tab)</span>
                 </a>
               ) : <Empty>No link</Empty>}

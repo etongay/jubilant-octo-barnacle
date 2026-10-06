@@ -15,7 +15,7 @@ import { expectedStitches } from '@/lib/counters.js';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { StatusBadge } from '@/components/badges.jsx';
-import { Plus, Minus, ChevronUp, ChevronDown, X, RotateCcw } from '@/lib/icons.jsx';
+import { Plus, Minus, CaretUp, CaretDown, X, ArrowCounterClockwise } from '@/lib/icons.jsx';
 import { cn } from '@/lib/utils.js';
 
 const PANEL_ID = 'counter-bar-panel';
@@ -78,8 +78,8 @@ export function CounterBar({
           className="h-auto min-w-0 flex-1 justify-start gap-2 px-2 py-1.5 text-left"
         >
           {expanded
-            ? <ChevronDown className="size-5 shrink-0" aria-hidden="true" />
-            : <ChevronUp className="size-5 shrink-0" aria-hidden="true" />}
+            ? <CaretDown className="size-5 shrink-0" aria-hidden="true" />
+            : <CaretUp className="size-5 shrink-0" aria-hidden="true" />}
           <span className="grid min-w-0 gap-0.5">
             <span className="truncate text-sm font-semibold">{project.name}</span>
             <span className="text-xs font-normal text-muted-foreground">
@@ -193,7 +193,7 @@ export function CounterBar({
               announce(`${primary.name} reset to 0`);
             }}
           >
-            <RotateCcw aria-hidden="true" /> Reset
+            <ArrowCounterClockwise aria-hidden="true" /> Reset
           </Button>
           <Button variant="outline" size="sm" className="min-h-11" onClick={onOpen}>
             Open project

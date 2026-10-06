@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { db } from '@/lib/db.js';
 import { announce } from '@/lib/announce.js';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ChevronUp, ChevronDown, Check, Trash2, Pencil } from '@/lib/icons.jsx';
+import { ArrowLeft, CaretUp, CaretDown, Check, Trash, PencilSimple } from '@/lib/icons.jsx';
 import { cn } from '@/lib/utils.js';
 
 const colorName = (i) => 'colour ' + String.fromCharCode(65 + (i || 0));
@@ -79,17 +79,17 @@ export default function ChartReader({ id, navigate }) {
               : 'Read mode — tapping a stitch marks it done');
           }}
         >
-          <Pencil aria-hidden="true" /> {editMode ? 'Done editing' : 'Edit mode'}
+          <PencilSimple aria-hidden="true" /> {editMode ? 'Done editing' : 'Edit mode'}
         </Button>
       </div>
 
       <div role="group" aria-label="Row navigation" className="mb-2 flex flex-wrap items-center gap-2">
         <Button variant="outline" onClick={() => moveRow(-1)}>
-          <ChevronDown aria-hidden="true" /> Previous row
+          <CaretDown aria-hidden="true" /> Previous row
         </Button>
         <span aria-live="polite" className="px-1 font-bold">Row {chart.currentRow} of {chart.height}</span>
         <Button variant="outline" onClick={() => moveRow(1)}>
-          <ChevronUp aria-hidden="true" /> Next row
+          <CaretUp aria-hidden="true" /> Next row
         </Button>
         <Button variant="accent" onClick={markRowDone}>
           <Check aria-hidden="true" /> Mark row complete
@@ -171,7 +171,7 @@ export default function ChartReader({ id, navigate }) {
         announce('Chart deleted');
         navigate('charts');
       }}>
-        <Trash2 aria-hidden="true" /> Delete chart
+        <Trash aria-hidden="true" /> Delete chart
       </Button>
     </section>
   );
