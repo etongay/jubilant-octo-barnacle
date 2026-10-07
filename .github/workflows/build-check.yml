@@ -1,7 +1,8 @@
 name: Build check
 
 # Builds every pull request so a broken build is caught before merge —
-# the Pages deploy only runs after a merge, when it's already live.
+# the Pages deploy only runs after a merge, when it's already live. Also
+# checks the two dark-mode token blocks still match and Storybook builds.
 on:
   pull_request:
 
@@ -22,4 +23,6 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm run check:dark-tokens
       - run: npm run build
+      - run: npm run build-storybook -- --quiet
