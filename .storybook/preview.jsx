@@ -2,10 +2,22 @@ import '../src/app.css';
 
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {
-  // The two app-level switches the design system responds to. Light/dark is
-  // not here: tokens.css follows prefers-color-scheme only, so use your OS
-  // setting (or DevTools → Rendering → Emulate prefers-color-scheme).
+  // The app-level switches the design system responds to, each an
+  // attribute or variable on <html> (see design-system.md §5).
   globalTypes: {
+    theme: {
+      description: 'Colour scheme',
+      toolbar: {
+        title: 'Theme',
+        icon: 'contrast',
+        items: [
+          { value: 'system', title: 'Follow OS' },
+          { value: 'light', title: 'Light', icon: 'sun' },
+          { value: 'dark', title: 'Dark', icon: 'moon' },
+        ],
+        dynamicTitle: true,
+      },
+    },
     surface: {
       description: 'Surface finish (design-system.md §5)',
       toolbar: {
@@ -32,10 +44,12 @@ const preview = {
       },
     },
   },
-  initialGlobals: { surface: 'flat', fontScale: '1' },
+  initialGlobals: { theme: 'system', surface: 'flat', fontScale: '1' },
   decorators: [
     (Story, { globals }) => {
       const root = document.documentElement;
+      if (globals.theme === 'system') delete root.dataset.theme;
+      else root.dataset.theme = globals.theme;
       if (globals.surface === 'glass') root.dataset.surface = 'glass';
       else delete root.dataset.surface;
       root.style.setProperty('--font-scale', globals.fontScale);

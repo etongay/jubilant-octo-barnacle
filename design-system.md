@@ -328,4 +328,6 @@ Machine-readable form of everything above — raw scales, semantic role aliases 
 - **Flat** (default): opaque surfaces, no blur — a plain shadow replaces the glass depth cue.
 - **Liquid Glass** (`<html data-surface="glass">`): the identical shapes, translucent, blurred surfaces — the treatment built in the previous pass.
 
+**Colour scheme** follows the device (`prefers-color-scheme`) by default. `<html data-theme="light">` or `data-theme="dark"` forces one mode regardless of the OS; nothing in the app sets it yet, but Storybook's Theme toolbar does. The forced-dark block in `tokens.css` repeats the media-query block's values, so edit both together.
+
 Both pass axe-core clean across light/dark (24 states audited: 2 colour schemes × 2 finishes × 6 screens). No Settings toggle exists yet for switching finishes at runtime.

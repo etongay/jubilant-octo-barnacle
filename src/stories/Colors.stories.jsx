@@ -1,5 +1,5 @@
 // Every raw Radix step, read live from tokens.css — so this page can never
-// drift from the shipped values. Flip your OS to dark mode to see the
+// drift from the shipped values. Use the toolbar's Theme switch to see the
 // dark-mode scales.
 
 const families = ['mint', 'orange', 'olive', 'red', 'yellow', 'blue', 'green'];
