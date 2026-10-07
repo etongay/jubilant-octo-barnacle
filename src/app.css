@@ -289,11 +289,16 @@ header h1 {
 .glass-control[data-state="open"] { background: color-mix(in srgb, var(--card) 85%, transparent); }
 .glass-control-wide { padding: 0 1.1rem; }
 @media (prefers-color-scheme: dark) {
-  .glass-control {
+  :root:not([data-theme="light"]) .glass-control {
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.14),
       0 4px 16px rgb(0 0 0 / 0.4);
   }
+}
+:root[data-theme="dark"] .glass-control {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 4px 16px rgb(0 0 0 / 0.4);
 }
 
 .tab-bar {
