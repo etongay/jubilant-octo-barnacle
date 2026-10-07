@@ -3,7 +3,7 @@
 // Fails if any rule's two copies have drifted apart.
 import { readFileSync } from 'node:fs';
 
-const files = ['src/tokens.css', 'src/app.css'];
+const files = ['src/tokens.generated.css', 'src/app.css'];
 const OS = ':root:not([data-theme="light"])';
 const FORCED = ':root[data-theme="dark"]';
 const norm = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').trim();
