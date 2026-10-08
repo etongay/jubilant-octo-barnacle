@@ -20,6 +20,7 @@ export {
   CheckIcon as Check,
   CaretUpIcon as CaretUp,
   CaretDownIcon as CaretDown,
+  CaretUpDownIcon as CaretUpDown,
   CaretLeftIcon as CaretLeft,
   MagnifyingGlassIcon as MagnifyingGlass,
   ArrowSquareOutIcon as ArrowSquareOut,
