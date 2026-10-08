@@ -13,9 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  ArrowLeft, Plus, Minus, Trash2, Share2, Copy, Pencil, ExternalLink, Camera, Undo2,
-} from '@/lib/icons.jsx';
+import { ArrowLeft, Plus, Minus, Trash, ShareNetwork, Copy, PencilSimple, ArrowSquareOut, Camera, ArrowUUpLeft } from '@/lib/icons.jsx';
 import ProjectDialog from './ProjectDialog.jsx';
 import { STATUS_LABELS, setActiveId } from './ProjectsView.jsx';
 
@@ -255,7 +253,7 @@ export default function ProjectDetail({ id, navigate }) {
                       <div className="grid shrink-0 gap-1">
                         {counter && (
                           <Button variant="outline" size="sm" className="min-h-11" onClick={() => restoreCheckpoint(cp)}>
-                            <Undo2 aria-hidden="true" /> Restore
+                            <ArrowUUpLeft aria-hidden="true" /> Restore
                           </Button>
                         )}
                         <Button
@@ -265,7 +263,7 @@ export default function ProjectDetail({ id, navigate }) {
                           aria-label={`Delete checkpoint: ${cp.counterName} ${cp.value}`}
                           onClick={() => deleteCheckpoint(cp)}
                         >
-                          <Trash2 aria-hidden="true" /> Delete
+                          <Trash aria-hidden="true" /> Delete
                         </Button>
                       </div>
                     </li>
@@ -283,7 +281,7 @@ export default function ProjectDetail({ id, navigate }) {
             {pattern ? (
               pattern.url ? (
                 <a className="inline-flex items-center gap-1 text-link underline" href={pattern.url} target="_blank" rel="noopener noreferrer">
-                  {pattern.title} <ExternalLink className="size-4" aria-hidden="true" />
+                  {pattern.title} <ArrowSquareOut className="size-4" aria-hidden="true" />
                 </a>
               ) : (
                 <Button variant="outline" onClick={() => navigate('pattern-viewer', pattern.id)}>
@@ -331,13 +329,13 @@ export default function ProjectDetail({ id, navigate }) {
           <CardHeader><CardTitle>Actions</CardTitle></CardHeader>
           <CardContent className="flex flex-wrap gap-2">
             <Button variant="outline" onClick={() => setEditOpen(true)}>
-              <Pencil aria-hidden="true" /> Edit details
+              <PencilSimple aria-hidden="true" /> Edit details
             </Button>
             <Button variant="outline" onClick={async () => {
               setShareText(await buildShareText(project));
               setShareOpen(true);
             }}>
-              <Share2 aria-hidden="true" /> Share to Ravelry
+              <ShareNetwork aria-hidden="true" /> Share to Ravelry
             </Button>
             <Button variant="destructive" onClick={async () => {
               if (!confirm(`Delete “${project.name}”? This cannot be undone.`)) return;
@@ -345,7 +343,7 @@ export default function ProjectDetail({ id, navigate }) {
               announce('Project deleted');
               navigate('projects');
             }}>
-              <Trash2 aria-hidden="true" /> Delete project
+              <Trash aria-hidden="true" /> Delete project
             </Button>
           </CardContent>
         </Card>
@@ -503,7 +501,7 @@ export default function ProjectDetail({ id, navigate }) {
                 announce('Sharing not supported here — copied to clipboard instead');
               }
             }}>
-              <Share2 aria-hidden="true" /> Share…
+              <ShareNetwork aria-hidden="true" /> Share…
             </Button>
             <Button asChild variant="outline">
               <a href="https://www.ravelry.com/projects" target="_blank" rel="noopener noreferrer">Open Ravelry</a>

@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { Plus } from '@/lib/icons.jsx';
 import { Button } from '@/components/ui/button';
 
 export default {

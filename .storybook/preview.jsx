@@ -1,4 +1,5 @@
 import '../src/app.css';
+import { IconContext } from '../src/lib/icons.jsx';
 
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {
@@ -53,7 +54,12 @@ const preview = {
       if (globals.surface === 'glass') root.dataset.surface = 'glass';
       else delete root.dataset.surface;
       root.style.setProperty('--font-scale', globals.fontScale);
-      return <Story />;
+      // Same icon defaults as src/main.jsx.
+      return (
+        <IconContext.Provider value={{ size: 24, 'aria-hidden': true }}>
+          <Story />
+        </IconContext.Provider>
+      );
     },
   ],
   parameters: {

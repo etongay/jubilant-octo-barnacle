@@ -20,7 +20,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
 import { TagChips } from '@/components/tag-chips.jsx';
-import { Plus, Search, Filter, Repeat } from '@/lib/icons.jsx';
+import { Plus, MagnifyingGlass, Filter, FilterX, Repeat } from '@/lib/icons.jsx';
 import ProjectDialog from './ProjectDialog.jsx';
 
 export const STATUS_LABELS = {
@@ -231,7 +231,7 @@ export default function ProjectsView({ navigate }) {
         <>
           <div className="mt-4 flex items-center gap-2">
             <div className="relative flex-1">
-              <Search
+              <MagnifyingGlass
                 aria-hidden="true"
                 className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
               />
@@ -356,7 +356,7 @@ export default function ProjectsView({ navigate }) {
               variant="outline"
               onClick={() => { setStatusFilter(null); setTagFilter([]); announce('Filters cleared'); }}
             >
-              Clear all
+              <FilterX aria-hidden="true" /> Clear all
             </Button>
             <Button onClick={() => {
               setFilterOpen(false);

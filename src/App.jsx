@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, lazy, Suspense } from 'react';
-import { Basket, Grid2x2, Volleyball, BookOpen, Settings } from './lib/icons.jsx';
+import { Books, GridFour, Yarn, BookOpen, Gear } from './lib/icons.jsx';
 import { settings } from './lib/db.js';
 import { registerAnnouncer } from './lib/announce.js';
 import ProjectsView from './features/ProjectsView.jsx';
@@ -18,11 +18,11 @@ import { cn } from './lib/utils.js';
 const PatternViewer = lazy(() => import('./features/PatternViewer.jsx'));
 
 const TABS = [
-  { id: 'projects', label: 'Projects', icon: Basket },
-  { id: 'charts', label: 'Charts', icon: Grid2x2 },
-  { id: 'yarn', label: 'Yarn', icon: Volleyball },
+  { id: 'projects', label: 'Projects', icon: Books },
+  { id: 'charts', label: 'Charts', icon: GridFour },
+  { id: 'yarn', label: 'Yarn', icon: Yarn },
   { id: 'patterns', label: 'Patterns', icon: BookOpen },
-  { id: 'more', label: 'More', icon: Settings },
+  { id: 'more', label: 'More', icon: Gear },
 ];
 
 const SUBTITLES = {
