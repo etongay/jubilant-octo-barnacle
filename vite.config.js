@@ -20,6 +20,9 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,webmanifest,woff2}'],
         navigateFallback: '/jubilant-octo-barnacle/index.html',
+        // Storybook is deployed under /storybook/ (deploy-pages.yml); without
+        // this the app's service worker answers those page loads with the app.
+        navigateFallbackDenylist: [/\/storybook\//],
       },
     }),
   ],

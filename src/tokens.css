@@ -80,8 +80,11 @@
   color-scheme: light;
 }
 
+/* Dark scales. Follows the OS by default; data-theme="light"|"dark" on
+   <html> forces one mode (used by Storybook's theme toggle). The forced
+   block repeats the media block's values — edit both together. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --mint-1: #0e1515;   --mint-2: #0f1b1b;   --mint-3: #092c2b;   --mint-4: #003a38;
     --mint-5: #004744;   --mint-6: #105650;   --mint-7: #1e685f;   --mint-8: #277f70;
     --mint-9: #86ead4;   --mint-10: #a8f5e5;  --mint-11: #58d5ba;  --mint-12: #c4f5e1;
@@ -112,6 +115,38 @@
 
     color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --mint-1: #0e1515;   --mint-2: #0f1b1b;   --mint-3: #092c2b;   --mint-4: #003a38;
+  --mint-5: #004744;   --mint-6: #105650;   --mint-7: #1e685f;   --mint-8: #277f70;
+  --mint-9: #86ead4;   --mint-10: #a8f5e5;  --mint-11: #58d5ba;  --mint-12: #c4f5e1;
+
+  --orange-1: #17120e; --orange-2: #1e160f; --orange-3: #331e0b; --orange-4: #462100;
+  --orange-5: #562800; --orange-6: #66350c; --orange-7: #7e451d; --orange-8: #a35829;
+  --orange-9: #f76b15; --orange-10: #ff801f; --orange-11: #ffa057; --orange-12: #ffe0c2;
+
+  --olive-1: #111210;  --olive-2: #181917;  --olive-3: #212220;  --olive-4: #282a27;
+  --olive-5: #2f312e;  --olive-6: #383a36;  --olive-7: #454843;  --olive-8: #5c625b;
+  --olive-9: #687066;  --olive-10: #767d74; --olive-11: #afb5ad; --olive-12: #eceeec;
+
+  --red-1: #191111;    --red-2: #201314;    --red-3: #3b1219;    --red-4: #500f1c;
+  --red-5: #611623;    --red-6: #72232d;    --red-7: #8c333a;    --red-8: #b54548;
+  --red-9: #e5484d;    --red-10: #ec5d5e;   --red-11: #ff9592;   --red-12: #ffd1d9;
+
+  --yellow-1: #14120b; --yellow-2: #1b180f; --yellow-3: #2d2305; --yellow-4: #362b00;
+  --yellow-5: #433500; --yellow-6: #524202; --yellow-7: #665417; --yellow-8: #836a21;
+  --yellow-9: #ffe629; --yellow-10: #ffff57; --yellow-11: #f5e147; --yellow-12: #f6eeb4;
+
+  --blue-1: #0d1520;   --blue-2: #111927;   --blue-3: #0d2847;   --blue-4: #003362;
+  --blue-5: #004074;   --blue-6: #104d87;   --blue-7: #205d9e;   --blue-8: #2870bd;
+  --blue-9: #0090ff;   --blue-10: #3b9eff;  --blue-11: #70b8ff;  --blue-12: #c2e6ff;
+
+  --green-1: #0e1512;  --green-2: #121b17;  --green-3: #132d21;  --green-4: #113b29;
+  --green-5: #174933;  --green-6: #20573e;  --green-7: #28684a;  --green-8: #2f7c57;
+  --green-9: #30a46c;  --green-10: #33b074; --green-11: #3dd68c; --green-12: #b1f1cb;
+
+  color-scheme: dark;
 }
 
 /* ======================================================================
