@@ -17,10 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  LinkIcon, FileText, Camera, Trash2, Plus, Search,
-  Folder, FolderPlus, FolderOpen, MoreHorizontal, Pencil, ArrowLeft,
-} from '@/lib/icons.jsx';
+import { LinkIcon, FileText, Camera, Trash, Plus, MagnifyingGlass, Folder, FolderPlus, FolderOpen, DotsThree, PencilSimple, ArrowLeft } from '@/lib/icons.jsx';
 
 const UNFILED = '__unfiled__';
 const NONE = '__none__';
@@ -191,7 +188,7 @@ export default function PatternsView({ navigate }) {
                   onClick={() => setManageFolder(f)}
                   className="absolute top-1 right-1"
                 >
-                  <MoreHorizontal aria-hidden="true" />
+                  <DotsThree aria-hidden="true" />
                 </Button>
               </li>
             ))}
@@ -232,7 +229,7 @@ export default function PatternsView({ navigate }) {
       )}
 
       <div className="relative mt-4">
-        <Search aria-hidden="true" className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+        <MagnifyingGlass aria-hidden="true" className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
         <Label htmlFor="pattern-filter" className="sr-only">Search patterns by title or tag</Label>
         <Input
           id="pattern-filter"
@@ -408,14 +405,14 @@ export default function PatternsView({ navigate }) {
               className="justify-start"
               onClick={() => { setFolderDraft({ id: manageFolder.id, name: manageFolder.name }); setManageFolder(null); setFolderFormOpen(true); }}
             >
-              <Pencil aria-hidden="true" /> Rename folder
+              <PencilSimple aria-hidden="true" /> Rename folder
             </Button>
             <Button
               variant="destructive"
               className="justify-start"
               onClick={() => { setDeleteFolder(manageFolder); setManageFolder(null); }}
             >
-              <Trash2 aria-hidden="true" /> Delete folder
+              <Trash aria-hidden="true" /> Delete folder
             </Button>
           </div>
           <DialogFooter>

@@ -20,7 +20,7 @@ import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import { db } from '@/lib/db.js';
 import { announce } from '@/lib/announce.js';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Minus, Plus, ExternalLink, MapPin, X } from '@/lib/icons.jsx';
+import { ArrowLeft, Minus, Plus, ArrowSquareOut, MapPin, X } from '@/lib/icons.jsx';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
@@ -169,7 +169,7 @@ export default function PatternViewer({ id, navigate }) {
         {blobUrl && (
           <Button variant="outline" asChild>
             <a href={blobUrl} target="_blank" rel="noopener noreferrer">
-              Open in new tab <ExternalLink aria-hidden="true" />
+              Open in new tab <ArrowSquareOut aria-hidden="true" />
             </a>
           </Button>
         )}
@@ -231,7 +231,7 @@ export default function PatternViewer({ id, navigate }) {
               className="absolute size-8 -translate-x-1/2 -translate-y-full rounded-full text-primary focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2"
               style={{ left: `${markOnThisPage.x * 100}%`, top: `${markOnThisPage.y * 100}%` }}
             >
-              <MapPin className="size-8 drop-shadow" fill="currentColor" aria-hidden="true" />
+              <MapPin className="size-8 drop-shadow" weight="fill" aria-hidden="true" />
             </button>
           )}
         </div>

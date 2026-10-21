@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
-import { Plus, Camera, Search } from '@/lib/icons.jsx';
+import { Plus, Camera, MagnifyingGlass } from '@/lib/icons.jsx';
 
 const WEIGHTS = ['Lace', 'Fingering', 'Sport', 'DK', 'Worsted', 'Aran', 'Bulky', 'Super bulky'];
 const NONE = '__none__';
@@ -283,7 +283,7 @@ export default function YarnView() {
                 onChange={e => setForm(f => ({ ...f, barcode: e.target.value }))} />
             </div>
             <Button type="button" variant="outline" disabled={ravBusy} onClick={fillFromRavelry}>
-              <Search aria-hidden="true" /> {ravBusy ? 'Searching Ravelry…' : 'Look up details on Ravelry'}
+              <MagnifyingGlass aria-hidden="true" /> {ravBusy ? 'Searching Ravelry…' : 'Look up details on Ravelry'}
             </Button>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setFormOpen(false)}>Cancel</Button>
