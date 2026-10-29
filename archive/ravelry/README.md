@@ -8,4 +8,4 @@ reference only and is not imported or built.
   `src/lib/share.js`.
 - Removed UI: the Ravelry connection card in Settings, the "Look up details on
   Ravelry" button in the yarn form, and the "Open Ravelry" link in the share dialog.
-- To see the app exactly as it was, check out the tag `archive/ravelry-integration`.
+- To see the app exactly as it was, check out commit `baa3500` (the last commit before this archive).
