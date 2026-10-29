@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { db } from '@/lib/db.js';
 import { announce } from '@/lib/announce.js';
 import { lookupBarcode, rememberBarcode } from '@/lib/lookup.js';
-import { searchRavelryYarn } from '@/lib/ravelry.js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
-import { Plus, Camera, MagnifyingGlass } from '@/lib/icons.jsx';
+import { Plus, Camera } from '@/lib/icons.jsx';
 
 const WEIGHTS = ['Lace', 'Fingering', 'Sport', 'DK', 'Worsted', 'Aran', 'Bulky', 'Super bulky'];
 const NONE = '__none__';
@@ -112,7 +111,6 @@ export default function YarnView() {
   const [scannerOpen, setScannerOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [form, setForm] = useState({});
-  const [ravBusy, setRavBusy] = useState(false);
 
   const reload = useCallback(() => {
     db.getAll('yarn').then(list => setStash(list.sort((a, b) => b.updatedAt - a.updatedAt)));
@@ -158,30 +156,6 @@ export default function YarnView() {
     announce('Yarn saved to stash');
     setFormOpen(false);
     reload();
-  };
-
-  const fillFromRavelry = async () => {
-    const query = [form.brand, form.name].filter(Boolean).join(' ').trim();
-    if (!query) { announce('Enter a brand or name first'); return; }
-    setRavBusy(true);
-    try {
-      const y = await searchRavelryYarn(query);
-      if (y) {
-        setForm(f => ({
-          ...f,
-          brand: f.brand || y.yarn_company_name || '',
-          name: y.name || f.name,
-          weight: WEIGHTS.find(w => y.yarn_weight?.name?.toLowerCase().includes(w.toLowerCase())) || f.weight,
-        }));
-        announce('Details filled from Ravelry');
-      } else {
-        announce('No match found on Ravelry');
-      }
-    } catch (err) {
-      announce('Ravelry lookup failed: ' + err.message);
-    } finally {
-      setRavBusy(false);
-    }
   };
 
   const shown = filter
@@ -282,9 +256,6 @@ export default function YarnView() {
               <Input id="yf-barcode" inputMode="numeric" value={form.barcode || ''}
                 onChange={e => setForm(f => ({ ...f, barcode: e.target.value }))} />
             </div>
-            <Button type="button" variant="outline" disabled={ravBusy} onClick={fillFromRavelry}>
-              <MagnifyingGlass aria-hidden="true" /> {ravBusy ? 'Searching Ravelry…' : 'Look up details on Ravelry'}
-            </Button>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setFormOpen(false)}>Cancel</Button>
               <Button type="submit">Save to stash</Button>

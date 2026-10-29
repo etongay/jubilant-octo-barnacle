@@ -3,7 +3,7 @@
 A cozy crochet companion for your phone. Track projects with stitch and row
 counters, manage your yarn stash by scanning ball-band barcodes, read mosaic
 crochet charts row by row, keep a pattern library from any source, and share
-finished projects to Ravelry.
+finished projects through your phone's share sheet.
 
 Built as a **progressive web app (PWA)**: no app store needed. Open it in your
 phone's browser, choose *Add to Home Screen*, and it installs like a native
@@ -78,9 +78,6 @@ projects, so a tag survives deleting the last project that used it.
      lookups/day).
   3. **[Go-UPC](https://go-upc.com/plans/api)** if you add an API key in
      Settings (paid, much larger database).
-- A **“Look up details on Ravelry”** button fills in weight and company data
-  from Ravelry's yarn database, which covers Scheepjes, Drops, Stylecraft,
-  Lion Brand, and thousands more.
 
 #### A note on yarn APIs (research findings)
 There is **no Scheepjes-specific or yarn-industry product API** — Scheepjes
@@ -92,10 +89,6 @@ and most yarn companies don't publish one. What exists:
   [UPCitemdb](https://www.upcitemdb.com/)) — coverage of yarn is patchy
   because many yarn barcodes are never registered, which is why the app's
   own remembered-scan history is the primary source.
-- **[Ravelry's API](https://www.ravelry.com/about/goodies)** — the only
-  genuinely yarn-aware database API (brand, weight, fibre, yardage), but it
-  is searched by name, not barcode. The app uses it to enrich details after
-  a scan identifies the product name.
 
 ### 📖 Pattern library & folders
 Import patterns three ways, then file, tag, search and filter them:
@@ -127,19 +120,13 @@ screen or in a dedicated PDF app.
 
 Patterns can be attached to projects and open with one tap.
 
-### 🔗 Ravelry connection
-1. Create free API keys at
-   [ravelry.com/pro/developer](https://www.ravelry.com/pro/developer)
-   (choose **Basic Auth: read only**).
-2. Enter the two keys under **More → Ravelry connection** and tap *Test
-   connection*. Keys never leave your device.
+### 🔗 Sharing a project
+**Sharing a project** composes a complete project summary (pattern, yarn,
+hook, progress, notes) that goes out through your phone's share sheet or
+clipboard.
 
-This enables Ravelry yarn lookups and identity checks. **Sharing a project**
-composes a complete project summary (pattern, yarn, hook, progress, notes)
-that goes out through your phone's share sheet or clipboard, ready to paste
-into a new Ravelry project. (Creating Ravelry projects fully automatically
-requires OAuth with a server-held secret, which a serverless, on-device app
-deliberately avoids — your credentials stay yours.)
+> Ravelry yarn lookup and the Ravelry connection settings were archived and
+> removed from the app. The original code is in [`archive/ravelry/`](./archive/ravelry/).
 
 ### 🎨 Design system: Mint, Orange & Olive, iOS-shaped
 Full token documentation lives in [`design-system.md`](./design-system.md); the summary:
@@ -165,7 +152,7 @@ Full token documentation lives in [`design-system.md`](./design-system.md); the 
 - **Typography**: [Fraunces](https://fonts.google.com/specimen/Fraunces)
   semibold for headlines, [Nunito Sans](https://fonts.google.com/specimen/Nunito+Sans)
   for body copy — both self-hosted, open-source variable fonts.
-- Feedback banners (Ravelry connection results, backup import errors) use
+- Feedback banners (backup import errors) use
   the same error/warning/info/success tokens as every other accent, so a
   banner reads correctly in light or dark without a separate palette.
 - Three text sizes, independent of the colour scheme.
@@ -220,7 +207,8 @@ src/lib/db.js                 IndexedDB + localStorage helpers
 src/lib/counters.js           expected-stitch-count math
 src/lib/lookup.js             barcode lookup chain
 src/lib/tags.js               built-in + custom project tags
-src/lib/ravelry.js            Ravelry API client + share text
+src/lib/share.js              project share text
+archive/ravelry/              archived Ravelry client (not built)
 src/lib/announce.js           screen-reader live region
 public/manifest.webmanifest   PWA install metadata (SW via vite-plugin-pwa)
 design-system.md              full design token documentation
