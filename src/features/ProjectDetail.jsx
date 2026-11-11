@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { db } from '@/lib/db.js';
 import { announce } from '@/lib/announce.js';
-import { buildShareText } from '@/lib/ravelry.js';
+import { buildShareText } from '@/lib/share.js';
 import { expectedStitches } from '@/lib/counters.js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -335,7 +335,7 @@ export default function ProjectDetail({ id, navigate }) {
               setShareText(await buildShareText(project));
               setShareOpen(true);
             }}>
-              <ShareNetwork aria-hidden="true" /> Share to Ravelry
+              <ShareNetwork aria-hidden="true" /> Share project
             </Button>
             <Button variant="destructive" onClick={async () => {
               if (!confirm(`Delete “${project.name}”? This cannot be undone.`)) return;
@@ -479,9 +479,9 @@ export default function ProjectDetail({ id, navigate }) {
       <Dialog open={shareOpen} onOpenChange={setShareOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Share to Ravelry</DialogTitle>
+            <DialogTitle>Share project</DialogTitle>
             <DialogDescription>
-              Copy this summary into a new Ravelry project, or use the share button if your phone supports it.
+              Copy this summary, or use the share button if your phone supports it.
             </DialogDescription>
           </DialogHeader>
           <Label htmlFor="share-text" className="sr-only">Project summary</Label>
@@ -502,9 +502,6 @@ export default function ProjectDetail({ id, navigate }) {
               }
             }}>
               <ShareNetwork aria-hidden="true" /> Share…
-            </Button>
-            <Button asChild variant="outline">
-              <a href="https://www.ravelry.com/projects" target="_blank" rel="noopener noreferrer">Open Ravelry</a>
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,6 +1,6 @@
 // Barcode → product lookup chain (see README: there is no yarn-industry
 // product API, so local scan history comes first, then general UPC
-// databases, then Ravelry fills in yarn details by name).
+// databases).
 
 import { db, settings } from './db.js';
 
