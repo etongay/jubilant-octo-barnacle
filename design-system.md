@@ -44,6 +44,8 @@ Every family maps its 12 raw steps to the same nine roles, so a component asking
 
 This is deliberate, not just a style choice — verified below, it also clears WCAG AA by a wide margin in every family, in both modes, which a solid step-9 fill with white text frequently cannot (Mint's own step 9 is a pale wash; white text on it lands at **1.43:1**, nowhere near AA). The same `bg`/`fg` pair additionally serves as the tint/tint-foreground pair for banners and alerts — one formula, two uses.
 
+**One exception: the Strong button.** The pattern reader's Next row is the one action repeated on every row, so it has to read as the dominant control at a glance. It uses Mint `solid` (step 9) as the fill, `solid-hover` (step 10) on hover and press, and `primary/on-solid` for text and icons. That role is dark in both modes (`olive-12` light, `olive-1` dark), because Mint 9 is pale in both, so neither white nor Mint 12 can sit on it (see §1.6). Strong is reserved for the reader's Next row; every other main action uses the step 4 on 12 Primary.
+
 ### 1.4 Green, not Mint, for success
 
 Mint is the brand colour — it appears on every primary button and interactive accent. If success also used Mint, "this succeeded" and "this is just a primary action" would look identical, which defeats the point of a status colour. Green is close enough in hue to still read as "positive" at a glance, but distinct enough to be its own signal, so it's a fifth family alongside the three named status hues.
@@ -205,6 +207,9 @@ Every pairing below was computed with the WCAG 2.1 relative-luminance formula, n
 | ~~`text` (step 11) on neutral bg — Yellow~~ | ~~4.35:1~~ | — | ❌ **fails** — use `fg` (step 12, 10.46:1) instead |
 | ~~`text` (step 11) on neutral bg — Orange~~ | ~~4.30:1~~ | — | ❌ **fails** — use `fg` (step 12, 11.07:1) instead |
 | White text on `solid` (step 9) — Mint | 1.43:1 | — | ❌ **fails badly** — Mint 9 is a pale wash; never pair `solid` with white text in this family. Use dark text (`olive-12`, 11.45:1) on any Mint 9 fill instead. |
+| `on-solid` on `solid` (step 9) — Mint, Strong button at rest | 11.45:1 | 13.18:1 | ✅ |
+| `on-solid` on `solid-hover` (step 10) — Mint, Strong button hover/pressed | 10.41:1 | 15.08:1 | ✅ |
+| ~~`fg` (step 12) on `solid` (step 9) — Mint, dark mode~~ | — | ~~1.19:1~~ | ❌ **fails badly** — Mint 12 turns light in dark mode while Mint 9 stays pale, so `fg` cannot sit on `solid`. Use `on-solid` instead. |
 
 **Rule of thumb this produces**: when a status or secondary colour is used as standalone text/icon color directly on the neutral background (not inside its own `bg` tint), check it precisely, not to two decimal places — Yellow, Orange, and Green's step 11 all read too light at normal text size (Green fails only at full floating-point precision: 4.4970 vs the 4.5000 threshold, a reminder to compute rather than round). Step 12 is the safe default for that specific case across every family; step 11 only for Mint, Red, and Blue.
 
@@ -288,7 +293,8 @@ Machine-readable form of everything above — raw scales, semantic role aliases 
               "dark":  { "1": "#0e1512", "2": "#121b17", "3": "#132d21", "4": "#113b29", "5": "#174933", "6": "#20573e", "7": "#28684a", "8": "#2f7c57", "9": "#30a46c", "10": "#33b074", "11": "#3dd68c", "12": "#b1f1cb" } }
   },
   "semantic": {
-    "note": "Each family resolves roles bg/bg-hover/bg-active/border/border-strong/solid/solid-hover/text/fg to steps 4/5/6/7/8/9/10/11/12 respectively — see §1.2. Yellow, orange and green substitute step 12 for the 'text' role (§1.6).",
+    "note": "Each family resolves roles bg/bg-hover/bg-active/border/border-strong/solid/solid-hover/text/fg to steps 4/5/6/7/8/9/10/11/12 respectively — see §1.2. Yellow, orange and green substitute step 12 for the 'text' role (§1.6). Mint is the one family with an extra role: 'on-solid' is the text and icon colour on a Mint 9 fill. It stays dark in both modes (olive-12 light, olive-1 dark), because Mint 9 is pale in both.",
+    "primary-on-solid": { "light": "olive-12", "dark": "olive-1" },
     "primary": "mint", "secondary": "orange", "neutral": "olive",
     "error": "red", "warning": "yellow", "info": "blue", "success": "green"
   },
@@ -322,6 +328,7 @@ Machine-readable form of everything above — raw scales, semantic role aliases 
 `src/app.css` imports `tokens.css` and maps the family/role tokens onto the shadcn-convention variable names components already use (`--primary`, `--destructive-foreground`, …) — no component markup changed, only what each variable resolves to. Two exceptions needed an actual component touch:
 
 - **`Button`** gained a new `accent` variant (Orange `bg`/`fg`) alongside the existing neutral `secondary` — shadcn's `secondary` is a generic muted surface used throughout the app (card backgrounds, grouped fields), so it stays Olive rather than becoming Orange; `accent` is the one that's actually the Secondary brand colour. `ChartReader`'s "Mark row complete" now uses it.
+- **`Button`** also has a `strong` type in Figma: Mint `solid` fill, `solid-hover` on hover and press, `primary/on-solid` text and icons; disabled reuses the `primary` disabled style. It is reserved for the pattern reader's Next row (§1.3). Figma: Button component set, `Type=Strong` (5 states), used inside the Next row bar component. Not yet built in code.
 - **Focus ring**: the usual "step 9 solid" convention fails badly for Mint specifically (`mint-9` is a pale wash, 1.36:1 against the app background — nowhere near the 3:1 a focus ring needs under WCAG 1.4.11). `--ring` uses `mint-11` instead (5.17:1), caught by computing rather than assuming the pattern holds for every hue.
 
 **Surface finish** — iOS-shaped components (capsule buttons, bottom-sheet dialogs with a grabber, grouped-inset fields, floating tab bar) come in two finishes, same shapes and radii in both:
